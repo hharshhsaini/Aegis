@@ -8,6 +8,14 @@
 happening near you, and — this is the part that matters — what is worth
 interrupting you about.
 
+![Aegis reconstructing the Bhote Koshi outburst flood over Nepal, with live risk scoring alongside](docs/media/incident-reconstruction.png)
+
+<sub>Incident reconstruction of the Bhote Koshi outburst flood (26 Aug 2026), with live
+wind, visibility and flood risk scored for the analyzed point. Note the `SCENARIO`
+badge and *"authored scenario · not live data"* on the incident row — a reconstruction
+can never be mistaken for an observation. Imagery: Vantor / GeoPera (CC BY-NC 4.0);
+basemap © Cesium ion / Esri.</sub>
+
 </div>
 
 ---
@@ -84,6 +92,30 @@ could justify it.
 receives it — it's rounded to ~1 km immediately, and only the coarse position is
 used for distance, geocoding and camera framing. Nothing is written to a URL, a
 log or analytics. The closest the camera will ever frame you is city scale.
+
+---
+
+## Incident reconstruction
+
+Aegis can replay an incident as an authored sequence over real terrain — the
+screenshot above is the **Bhote Koshi outburst flood** of 26 August 2026, stepped
+through 25 shots along the gorge with 2021 historical imagery cross-faded against
+2026 post-event imagery.
+
+It is scaffolding for understanding an event, and it is labelled as such
+everywhere it appears:
+
+- the incident row carries a `SCENARIO` badge and the words *authored scenario ·
+  not live data*
+- the status chip switches from `MONITORING` to `SCENARIO` while it plays
+- scenario events never enter live incident counts and never trigger a real
+  voice alert
+- the panel states its own limits: *"schematic downstream progression, not
+  modeled arrival time; not an official hazard model"*
+
+The risk panel beside it stays live throughout, scoring the analyzed point from
+real Open-Meteo conditions. Reconstruction and observation sit side by side
+without ever being confused for one another.
 
 ---
 
