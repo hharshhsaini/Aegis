@@ -170,8 +170,9 @@ export function createAegisServer({
   }
 
   return createServer((req, res) => {
+    const pathname = (req.url || '/').split('?')[0];
     // A load balancer needs something cheap that does not touch a provider.
-    if (req.url === '/healthz') {
+    if (pathname === '/healthz' || pathname === '/healthz/') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ status: 'ok', uptime: process.uptime() }));
       return;
