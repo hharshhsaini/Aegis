@@ -1,0 +1,17 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+.agents
+.planning
+.claude
+.gev-cache
+.gev-logs
+tests
+coverage
+*.md
+!README.md
+.DS_Store

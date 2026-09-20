@@ -1,0 +1,16 @@
+services:
+  aegis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aegis:latest
+    container_name: aegis-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - PORT=8080
+      - HOST=0.0.0.0
