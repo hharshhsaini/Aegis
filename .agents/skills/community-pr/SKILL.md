@@ -13,7 +13,7 @@ record; read it before reviewing or executing the PR.
 ## Load the trusted procedure
 
 Work from a trusted checkout before entering the contributor's tree. Confirm the
-upstream is `bilawalsidhu/gods-eye-view`, fetch its `main`, and record the fetched
+upstream is `hharshhsaini/Aegis`, fetch its `main`, and record the fetched
 commit SHA. Read `docs/MAINTAINER_WORKFLOW.md` and
 `.agents/skills/community-pr/SKILL.md` from that SHA with `git show SHA:path`,
 then follow the workflow's related-document instructions. The relative link above

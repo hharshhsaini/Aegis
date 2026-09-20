@@ -2474,7 +2474,7 @@ Historical planning documents may not match runtime behavior.
 ## Current Baseline
 
 - The project is branded Aegis (package name `aegis`). It is derived from the
-  upstream `bilawalsidhu/gods-eye-view` project. Runtime behavior is defined by this document and the current
+  upstream project this is derived from. Runtime behavior is defined by this document and the current
   source tree rather than historical branch notes.
 
 ## Runtime Stack

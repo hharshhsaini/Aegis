@@ -225,12 +225,13 @@ All four must stay green. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits & licence
 
-Aegis is a derivative work built on
-**[God's Eye View](https://github.com/bilawalsidhu/gods-eye-view)** by
-[Bilawal Sidhu](https://github.com/bilawalsidhu) and Sameh Khamis — an
-MIT-licensed open-source 3D globe platform. The globe, layer architecture,
-voice infrastructure and much of the rendering stack come from that project.
-Aegis builds the disaster-intelligence layer on top.
+Maintained by [Harsh Saini](https://github.com/hharshhsaini).
+
+Aegis is built on the MIT-licensed open-source project
+[God's Eye View](https://github.com/bilawalsidhu/gods-eye-view), which provides
+the globe and rendering stack. The disaster-intelligence layer is this
+project's own work. Retaining that notice is a condition of the MIT licence —
+see [LICENSE](LICENSE).
 
 Licensed under the [MIT Licence](LICENSE), which covers **source code only**.
 

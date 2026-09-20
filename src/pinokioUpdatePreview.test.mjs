@@ -377,11 +377,11 @@ test('a credential in a query parameter is not printed', () => {
 });
 
 test('an ordinary remote URL is printed unchanged', () => {
-  const url = 'https://github.com/bilawalsidhu/gods-eye-view.git';
+  const url = 'https://github.com/hharshhsaini/Aegis.git';
   assert.equal(redactRemoteUrl(url), url);
   assert.equal(
-    redactRemoteUrl('git@github.com:bilawalsidhu/gods-eye-view.git'),
-    'git@github.com:bilawalsidhu/gods-eye-view.git',
+    redactRemoteUrl('git@github.com:hharshhsaini/Aegis.git'),
+    'git@github.com:hharshhsaini/Aegis.git',
   );
   assert.equal(redactRemoteUrl(null), null);
   assert.equal(redactRemoteUrl(''), null);

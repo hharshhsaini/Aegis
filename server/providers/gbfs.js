@@ -59,7 +59,7 @@ export async function fetchGbfsUpstream(
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        'User-Agent': 'gods-eye-view-gbfs-proxy/1.0',
+        'User-Agent': 'aegis-gbfs-proxy/1.0',
       },
       redirect: 'manual',
       signal: controller.signal,

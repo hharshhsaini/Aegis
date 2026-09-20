@@ -90,12 +90,8 @@ ownership and adoption process.
 
 ## Maintainers
 
-Aegis is derived from the open-source
-[God's Eye View](https://github.com/bilawalsidhu/gods-eye-view) project,
-maintained by [Bilawal Sidhu](https://github.com/bilawalsidhu)
-and [Sameh Khamis](https://github.com/samehkhamis) at
-[Halfpixel](https://halfpixel.ai). Either maintainer can review and merge
-contributions.
+Aegis is maintained by [Harsh Saini](https://github.com/hharshhsaini).
+Open an issue or a pull request and I'll review it.
 
 ## Ground rules
 
