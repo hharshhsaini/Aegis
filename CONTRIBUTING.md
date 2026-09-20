@@ -1,14 +1,14 @@
-# Contributing to God's Eye View
+# Contributing to Aegis
 
-Thanks for being here. God's Eye View is an open foundation for live spatial intelligence in the browser, and it gets better when more people run it, break it, and extend it.
+Thanks for being here. Aegis is an open foundation for live spatial intelligence in the browser, and it gets better when more people run it, break it, and extend it.
 
 ## Getting set up
 
 Use Node.js 24.14.x or 26.x (also enforced by `package.json`).
 
 ```bash
-git clone https://github.com/bilawalsidhu/gods-eye-view.git
-cd gods-eye-view
+git clone <aegis-repository-url> aegis
+cd aegis
 nvm install 24.14.0
 nvm use 24.14.0
 npm install
@@ -32,8 +32,9 @@ Open `http://localhost:4173`. Before sending a PR run `npm run build`, `npm test
 Run `npm run build` followed by `npm run preview`. Preview serves the built
 frontend and local data-provider APIs. Keep optional server credentials in the
 ignored `.env`; browser keys are embedded during the build, so rebuild after
-changing them. Provider Settings and `/api/setup/*` are development-only: edit
-configuration through the development app or environment file. Unknown API
+changing them. `/api/setup/status` is a development-only, read-only report of
+which providers are configured — it returns booleans, never values, and there
+is no endpoint that accepts a credential. Unknown API
 paths return JSON 404 responses. Vite preview is for checking a local build;
 it is not a production server.
 
@@ -51,7 +52,7 @@ The highest-leverage places to jump in:
 
 - **No framework.** Vanilla JS + [CesiumJS](https://cesium.com/platform/cesiumjs/) + [Vite](https://vitejs.dev/).
 - **Assembly lives in `src/app/`; standalone defaults live in `src/standalone/`.** UI controllers live in `src/ui/`, layer factories in `src/layers/`, portable sources in `src/sources/`, and application operations in `src/services/`. Existing `src/ui.js` and `src/data/<layer>.js` entries retain compatibility; new code belongs with its focused owner.
-- Sources acquire records; renderers own Cesium resources. Import `gods-eye-view/layers/<family>/source` when only a source factory is needed. Common voice controls consume the session interface; protocol adapters own connection details.
+- Sources acquire records; renderers own Cesium resources. Import `aegis/layers/<family>/source` when only a source factory is needed. Common voice controls consume the session interface; protocol adapters own connection details.
 - **Secrets stay server-side.** Anything needing a private key goes through a local proxy under `server/providers/`. The browser only ever sees the Google Maps key (which you restrict) and ephemeral tokens.
 - `docs/CURRENT-STATE.md` is the authoritative runtime reference — read it first.
 
@@ -89,7 +90,9 @@ ownership and adoption process.
 
 ## Maintainers
 
-God's Eye View is maintained by [Bilawal Sidhu](https://github.com/bilawalsidhu)
+Aegis is derived from the open-source
+[God's Eye View](https://github.com/bilawalsidhu/gods-eye-view) project,
+maintained by [Bilawal Sidhu](https://github.com/bilawalsidhu)
 and [Sameh Khamis](https://github.com/samehkhamis) at
 [Halfpixel](https://halfpixel.ai). Either maintainer can review and merge
 contributions.

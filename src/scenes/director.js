@@ -1637,6 +1637,7 @@ export class SceneDirector {
   getPlaybackStatus() {
     return {
       running: this._running,
+      paused: Boolean(this._paused),
       selectedSceneId: this._selectedSceneId,
       selectedShotId: this._selectedShotId,
       elapsedMs: this._activeRun
@@ -1724,7 +1725,9 @@ export class SceneDirector {
 
     this._usesAuthoredCamera = queue.some(({ shot }) => !!shot.move);
 
-    // Transition to running state
+    // Transition to running state. A previous run's pause must not carry into
+    // this one — starting is an explicit instruction to play.
+    this._resolvePause();
     this._running = true;
     this._previewRun = preview;
     if (preview) this._setPlaybackActive(true);
@@ -1778,6 +1781,7 @@ export class SceneDirector {
           (scene) => scene.id === this._loadedSceneId,
         ),
         releaseOnFinish: preview,
+        gate: () => this._awaitResume(),
       });
     } catch (error) {
       this._updateStatus(`Error: ${error.message || 'run failed'}`);
@@ -1814,6 +1818,59 @@ export class SceneDirector {
   }
 
   /**
+   * Suspend the run at the next shot phase boundary.
+   *
+   * The runner cannot interrupt a phase that has already started, so a camera
+   * flight in progress lands before the pause takes hold. The alternative —
+   * tearing down a flight mid-arc — leaves the camera somewhere no shot
+   * describes, which is worse than a second of latency.
+   *
+   * @returns {boolean} Whether the run is now paused.
+   */
+  pauseScene() {
+    if (!this._running || this._paused) return this._paused;
+    this._paused = true;
+    // The gate resolves through this promise; holding the resolver is what lets
+    // resumeScene() release every awaiting phase at once.
+    this._pausePromise = new Promise((resolve) => {
+      this._pauseResolve = resolve;
+    });
+    this._updateStatus('Paused');
+    this._logEvent('scene_paused', {});
+    return true;
+  }
+
+  /**
+   * Release a paused run.
+   * @returns {boolean} Whether a pause was released.
+   */
+  resumeScene() {
+    if (!this._paused) return false;
+    this._resolvePause();
+    this._updateStatus('Running');
+    this._logEvent('scene_resumed', {});
+    return true;
+  }
+
+  /** @returns {boolean} Whether the run is paused. */
+  get paused() {
+    return Boolean(this._paused);
+  }
+
+  /** Clear the pause and release anything waiting on it. */
+  _resolvePause() {
+    this._paused = false;
+    this._pauseResolve?.();
+    this._pauseResolve = null;
+    this._pausePromise = null;
+  }
+
+  /** The gate the playback runner awaits between phases. */
+  _awaitResume() {
+    return this._pausePromise || Promise.resolve();
+  }
+
+  /**
    * Cancel the active scene run. Sets the cancellation token, aborts the
    * run's in-flight layer transitions and Cesium camera flight, and logs a
    * stop event.
@@ -1827,6 +1884,11 @@ export class SceneDirector {
    * @param {string} [reason='Stopped'] - Human-readable cancellation reason
    */
   stopScene(reason = 'Stopped') {
+    // Release the pause first: a stopped run still has phases awaiting the
+    // gate, and they must be allowed through to observe the cancellation.
+    // Guarded like every other collaborator here, because stopScene is also
+    // borrowed onto partial directors that only supply what they exercise.
+    this._resolvePause?.();
     this._setSceneMediaPlayback();
     this._interactions?.clear();
     this._dataPacks?.clear();
@@ -2371,6 +2433,9 @@ export class SceneDirector {
    * and resets UI buttons to the idle state.
    */
   _finishRun() {
+    // A run that ends while paused leaves the flag set, which would make the
+    // next START report itself as paused before it had a chance to play.
+    this._resolvePause();
     this._setSceneMediaPlayback();
     this._clock.finish();
     this._setPlaybackKeyboardEnabled(false);

@@ -1,4 +1,4 @@
-# God's Eye View — Testing Guide (voice map-annotation whiteboard + live tracking)
+# Aegis — Testing Guide (voice map-annotation whiteboard + live tracking)
 
 > [!NOTE]
 > This is a **manual field-test scenario script** for the June-2026 whiteboard +
@@ -63,7 +63,7 @@ settled and not applicable because no Google 3D tileset is active.
 ## Setup
 
 - **URL:** http://localhost:4173 — auto-flies to Austin on load. Give photoreal tiles ~10s.
-- **Voice (the real feature):** click **GEV MIC** (bottom of screen) → wait for **LISTENING** →
+- **Voice (the real feature):** click **MIC** (bottom of screen) → wait for **LISTENING** →
   just talk. It marks the map *as it talks*, without announcing that it's drawing. Click
   **STOP** when done. (Needs `OPENAI_API_KEY`; `dev-fresh.sh` injects it from Keychain.)
 - **Console (deterministic, no mic/live-data needed):** open DevTools (**Cmd-Opt-J**) and use:
@@ -126,7 +126,7 @@ cancellation, hardened Overpass + route proxies. Not much to see by hand (see §
 - ✅ Identical smooth behavior.
 
 **1e · Z-order: tracked plane stays on top (→ R13, trickiest to stage)**
-1. While tracking a plane over Austin, GEV MIC: *"annotate downtown Austin."*
+1. While tracking a plane over Austin, MIC: *"annotate downtown Austin."*
 2. Orbit/zoom so the plane crosses the annotation's outline or label. 📸 Snap the overlap.
 - ✅ The annotation **dims** where it covers the plane/label — plane stays visible on top.
   ❌ *Was:* the annotation drew over and hid the plane.
@@ -135,7 +135,7 @@ cancellation, hardened Overpass + route proxies. Not much to see by hand (see §
 
 ## 2. Voice annotation — scoping & honesty (Batch B)
 
-> All from the Austin default view (no camera move needed). Click GEV MIC, then speak.
+> All from the Austin default view (no camera move needed). Click MIC, then speak.
 
 **2a · Scope: building vs region (→ R1)** — say each, watch what gets outlined:
 - *"annotate the Texas State Capitol"* → ✅ the **Capitol building**, not the whole state.
@@ -216,7 +216,7 @@ While recording, call out anything in these areas — this is the feedback I mos
 - **A voice mark didn't land:** the place may not geocode — try a more specific name
   (e.g. "Palace of Fine Arts, San Francisco").
 - **No planes:** OpenSky data may be momentarily sparse; scroll out or wait a poll cycle.
-- **No GEV MIC button / voice errors:** `OPENAI_API_KEY` didn't load — use the console API for
+- **No MIC button / voice errors:** `OPENAI_API_KEY` didn't load — use the console API for
   the annotation tests and skip the voice-only ones (§2).
 
 

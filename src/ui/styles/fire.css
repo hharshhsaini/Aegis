@@ -1,0 +1,263 @@
+/* ===========================================================================
+   AEGIS FIRE INTELLIGENCE PANEL
+
+   Fire carries its own palette across the product — amber through red — so a
+   fire surface is never mistaken for the cyan application chrome or the weather
+   overlay's risk tints. The panel colour matches the globe markers exactly.
+
+   Structure mirrors the intelligence panel: the finding first, then the
+   evidence, with raw FIRMS fields folded away in a details element because they
+   are for verification, not for reading.
+   =========================================================================== */
+
+:root {
+  --fire-low: #ffb347;
+  --fire-moderate: #ff8c42;
+  --fire-high: #ff5c33;
+  --fire-extreme: #ff2d2d;
+}
+
+/* Fire intelligence rides the RIGHT side, opposite the weather panel on the
+   left. The left rail auto-collapses its members when they do not all fit, and
+   two full intelligence panels do not fit; giving each layer its own side keeps
+   both readable and leaves DATA LAYERS and SCENES their room. */
+#fire-panel {
+  --panel-expanded-width: 300px;
+  position: fixed;
+  right: var(--right-rail-x);
+  /* Below the DISPLAY/CONTEXT rail, which occupies the upper right. */
+  top: 50vh;
+  z-index: 99;
+  width: var(--panel-expanded-width);
+  max-height: 38vh;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(255, 140, 66, 0.22);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+#fire-panel:hover {
+  border-color: rgba(255, 140, 66, 0.4);
+}
+
+#fire-panel .panel-title {
+  color: var(--fire-moderate);
+}
+
+.aegis-fire-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 38vh;
+}
+
+.aegis-fire-body {
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0 16px 12px;
+}
+
+.aegis-fire-status {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  padding: 6px 0 8px;
+}
+
+.aegis-fire-refresh {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+
+.aegis-fire-refresh:hover {
+  color: var(--fire-moderate);
+}
+
+.aegis-fire-refresh[aria-busy='true'] {
+  color: var(--fire-moderate);
+  animation: aegis-fire-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes aegis-fire-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.aegis-fire-heading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--fire-moderate);
+  padding-top: 4px;
+}
+
+.aegis-fire-summary {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin: 6px 0 10px;
+}
+
+.aegis-fire-section {
+  padding: 10px 0 2px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 10px;
+}
+
+.aegis-fire-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+}
+
+.aegis-fire-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aegis-fire-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.aegis-fire-key {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.aegis-fire-value {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.aegis-fire-activity {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.aegis-fire-note {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.aegis-fire-spread-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.aegis-fire-spread-level {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.aegis-fire-spread-score {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.aegis-fire-drivers {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.aegis-fire-drivers li {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 6px;
+}
+
+.aegis-fire-drivers li::before {
+  content: '•';
+  color: var(--fire-moderate);
+}
+
+.aegis-fire-direction {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--fire-moderate);
+  letter-spacing: 0.06em;
+}
+
+.aegis-fire-details {
+  margin-top: 12px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 8px;
+}
+
+.aegis-fire-details summary {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.aegis-fire-details[open] summary {
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+}
+
+/* Attribution is not decoration: NASA FIRMS requires credit, and the line also
+   carries the "not ground truth" qualification, so it stays visible whether or
+   not a cluster is selected. */
+.aegis-fire-attribution {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+}
+
+@media (max-width: 900px) {
+  #fire-panel {
+    --panel-expanded-width: calc(100vw - 32px);
+  }
+}
+
+/* Collapsed, the panel is a pill in the rail like every other panel. */
+#fire-panel.collapsed {
+  width: var(--left-collapsed-width);
+}
+
+#fire-panel.collapsed .aegis-fire-body {
+  display: none;
+}

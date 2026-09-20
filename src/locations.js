@@ -799,14 +799,25 @@ export async function searchAndFlyTo(viewer, query, options = {}) {
   // geocoder read too broadly; a typed coordinate or a bundled name has no
   // ambiguity to rescue, and letting a nearby Places hit win would send an
   // operator who typed "43.1731, -79.0384" to whatever is closest instead.
-  const recovered = result?.exact
-    ? null
-    : await (options.recoverNearView || placesNearViewRecovery)(
-        viewer,
-        query,
-        result && !outcome.fallbackUsed ? { lat, lon: lng } : null,
-        signal,
-      );
+  //
+  // Nor over a place that geocoded as an AREA. "Mumbai" resolves to a locality
+  // with its own viewport — that is not a name read too broadly, it is the
+  // answer — but recovery replaced it with a nearby Places hit whose types
+  // framed as a building, and the camera arrived 136 m over a street instead
+  // of 41 km over the city. An area-like geocode has no ambiguity for recovery
+  // to resolve, so it is left alone.
+  const geocodedArea = shouldFrameGeocodeViewport(
+    geocodeNavigationMode(result?.types || []),
+  );
+  const recovered =
+    result?.exact || geocodedArea
+      ? null
+      : await (options.recoverNearView || placesNearViewRecovery)(
+          viewer,
+          query,
+          result && !outcome.fallbackUsed ? { lat, lon: lng } : null,
+          signal,
+        );
   signal?.throwIfAborted();
   if (recovered) {
     lat = recovered.lat;
@@ -888,6 +899,31 @@ export async function searchAndFlyTo(viewer, query, options = {}) {
         rangeM: null,
       };
     }
+
+    // Framing needs a viewport, and not every geocoder returns one. The
+    // keyless chain answers "Mumbai" with a point, a label and
+    // `types: ['locality']` but no bounds, so `flyToViewportBounds` refused it
+    // and the search fell through to the precise-place path below — arriving
+    // 136 m over a street instead of 41 km over the city.
+    //
+    // An area-like place with no bounds still knows what KIND of place it is,
+    // which is enough to choose a sensible height. These are framing distances,
+    // not claims about the extent of anything.
+    const fallbackRange = AREA_FALLBACK_RANGE_M[navigationMode];
+    if (fallbackRange) {
+      if (!mayFly()) return CANCELLED_SEARCH;
+      flyToLandmark(viewer, lat, lng, {
+        range: fallbackRange,
+        // Near vertical: an oblique view of a whole city or country puts most
+        // of the frame on the horizon.
+        pitch: -75,
+        duration,
+        onStart: options.onStart,
+        onComplete: options.onComplete,
+        onCancel: options.onCancel,
+      });
+      return { label, navigationMode, rangeM: fallbackRange };
+    }
   }
 
   const shouldResolveBuilding = navigationMode === 'precise-place';
@@ -958,6 +994,21 @@ function placesViewportToBounds(vp) {
  * like the camera picked one arbitrary building on the street (field test 8 / rootcause
  * doc §3) — both frame their geocode viewport instead.
  */
+/**
+ * Framing distance for an area-like place whose geocode carried no viewport.
+ *
+ * Used only as a fallback: a real viewport is always better, because it frames
+ * the place's own extent rather than a guess at how big that kind of place is.
+ * These are camera distances chosen so the named place fills a 16:9 frame —
+ * they are not assertions about the size of any particular city or country.
+ */
+const AREA_FALLBACK_RANGE_M = Object.freeze({
+  'region-overview': 900_000,
+  'city-overview': 45_000,
+  'area-overview': 250_000,
+  'street-corridor': 2_500,
+});
+
 export function geocodeNavigationMode(types) {
   const values = new Set(types);
   if (

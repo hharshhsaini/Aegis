@@ -10,14 +10,14 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { overpassProxy } from 'gods-eye-view/server/providers/overpass';
-import { militaryInstallationsProxy } from 'gods-eye-view/server/providers/military-installations';
+import { overpassProxy } from 'aegis/server/providers/overpass';
+import { militaryInstallationsProxy } from 'aegis/server/providers/military-installations';
 import {
   regionalBriefProxy,
   weatherEffectsProxy,
-} from 'gods-eye-view/server/providers/regional';
-import { openAiRealtimeProxy } from 'gods-eye-view/server/providers/openai';
-import { keySetupEndpoint } from 'gods-eye-view/server/standalone/key-setup';
+} from 'aegis/server/providers/regional';
+import { openAiRealtimeProxy } from 'aegis/server/providers/openai';
+import { keySetupEndpoint } from 'aegis/server/standalone/key-setup';
 import { realtimeInstructions } from '../../server/providers/openai/instructions.js';
 import { GEV_REALTIME_TOOLS } from '../../server/providers/openai/tools.js';
 
@@ -221,39 +221,44 @@ test('debug logging resolves each supplied application directory independently',
   }
 });
 
-test('key setup writes only the supplied application root, retains request guards and stays absent from preview', async (t) => {
-  const first = root(t),
-    untouched = root(t);
-  env(t, 'OPENAI_API_KEY', undefined);
+test('provider status is read-only: no credential-write endpoint, no values', async (t) => {
+  // The in-app panel that accepted credentials over HTTP and wrote them to a
+  // dotenv file is gone. What is left answers "which providers are
+  // configured?" with booleans and nothing else.
+  const first = root(t);
+  env(t, 'OPENAI_API_KEY', 'sk-fixture-only-not-a-real-key');
   const plugin = keySetupEndpoint({ sourceRoot: first });
   assert.equal(plugin.apply({}, { command: 'serve', isPreview: true }), false);
   assert.equal(plugin.configurePreviewServer, undefined);
+
   const routes = install(plugin);
-  const handler = routes.get('/api/setup/keys');
-  const body = JSON.stringify({
-    OPENAI_API_KEY: 'sk-fixture-only-not-a-real-key',
-  });
   assert.equal(
-    (
-      await request(handler, {
-        method: 'POST',
-        body,
-        origin: 'https://example.com',
-      })
-    ).status,
+    routes.get('/api/setup/keys'),
+    undefined,
+    'the credential-write endpoint must stay gone',
+  );
+
+  const handler = routes.get('/api/setup/status');
+  // The loopback/origin guard is kept: the payload holds no secrets, but which
+  // providers are unconfigured is still reconnaissance.
+  assert.equal(
+    (await request(handler, { origin: 'https://example.com' })).status,
     403,
   );
-  assert.equal(existsSync(path.join(first, '.env')), false);
-  const saved = await request(handler, { method: 'POST', body });
-  assert.equal(saved.status, 200);
-  assert.match(
-    readFileSync(path.join(first, '.env'), 'utf8'),
-    /OPENAI_API_KEY=sk-fixture-only-not-a-real-key/,
+  assert.equal((await request(handler, { method: 'POST' })).status, 405);
+
+  const status = await request(handler);
+  assert.equal(status.status, 200);
+  assert.equal(
+    status.body.includes('sk-fixture-only-not-a-real-key'),
+    false,
+    'a credential reached the status payload',
   );
-  if (process.platform !== 'win32')
-    assert.equal(statSync(path.join(first, '.env')).mode & 0o777, 0o600);
-  assert.equal(saved.body.includes('sk-fixture-only-not-a-real-key'), false);
-  assert.equal(existsSync(path.join(untouched, '.env')), false);
+  const parsed = JSON.parse(status.body);
+  assert.equal(parsed.keys.find((key) => key.id === 'openai').set, true);
+
+  // Nothing is written anywhere, whatever is asked of it.
+  assert.equal(existsSync(path.join(first, '.env')), false);
 });
 
 test('Realtime service configuration selects compatible endpoint/model without forwarding request model IDs or keys', async () => {

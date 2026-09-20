@@ -1,5 +1,6 @@
 import { LayerLifecycle } from '../data/lifecycle.js';
 import { LayerPresentation } from './layerPresentation.js';
+import { hideRetiredLayerPanels } from './retiredLayerPanels.js';
 /** Register the application layer catalog before allowing state restoration. */
 export function createApplicationData({
   scene: { viewer, mapStackController },
@@ -31,6 +32,8 @@ export function createApplicationData({
     layer.attachMapStackController?.(mapStackController);
   // Restoration starts only after the caller's complete registry is sealed.
   dataManager.finalizeRegistrations(catalog.metadata);
+  // A panel whose layer the catalog retired can never be filled or enabled.
+  hideRetiredLayerPanels({ isRegistered: (id) => dataManager.layers.has(id) });
   if (allowQaRegistration) {
     window.__gevQaRegisterLayer = (targetManager, layerModule) => {
       if (targetManager !== dataManager)

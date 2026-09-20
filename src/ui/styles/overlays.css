@@ -168,9 +168,22 @@
   padding: 4px;
 }
 
+/* The upper-left belongs to the Aegis status chip and nothing else.
+   This corner carried a mode word and a running telemetry summary — sector,
+   coordinates, altitude, window size, sun angle — directly under the chip,
+   which is the clutter that made the console read as a dashboard. The corner
+   stays in the DOM because the telemetry tick and the cockpit layout both
+   still address its readouts; it simply no longer competes for the one area
+   a person looks at first. The same numbers remain on the globe's own
+   readouts and in the panel that owns them. */
 .hud-top-left {
   top: 120px;
   left: 36px;
+  display: none;
+}
+
+body.cockpit-mode .hud-top-left {
+  display: flex;
 }
 
 .hud-top-right {
@@ -278,14 +291,22 @@
   opacity: 0.5;
 }
 
+/* Collection time and off-nadir angle, set sideways down the left margin.
+   Sensor-geometry readings for an imaging pass, which is not what this console
+   is: they told a disaster operator nothing and crowded the one corner that
+   now has a job. Kept in the DOM for the telemetry tick and cockpit mode. */
 .hud-left-edge {
   left: 36px;
   top: 50%;
   transform: translateY(-50%) rotate(-90deg);
   transform-origin: left center;
   white-space: nowrap;
-  display: flex;
+  display: none;
   gap: 20px;
+}
+
+body.cockpit-mode .hud-left-edge {
+  display: flex;
 }
 
 .hud-right-edge {

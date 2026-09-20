@@ -69,7 +69,10 @@ test('the guidance names the environment variable and where to set it', () => {
     stats: { keyRequired: true },
   });
   assert.match(text, /FIRMS_MAP_KEY/);
-  assert.match(text, /Provider Settings/);
+  // The application no longer has anywhere to paste a credential, so the
+  // guidance points at the environment rather than at a settings panel.
+  assert.match(text, /environment/);
+  assert.ok(!/Provider Settings/.test(text));
 });
 
 test('guidance appears only for a key that is actually missing and actually named', () => {

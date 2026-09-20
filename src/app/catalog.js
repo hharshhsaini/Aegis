@@ -50,7 +50,10 @@ export function catalogControlServices(catalog) {
     throw new TypeError('An application layer catalog is required');
   return Object.fromEntries(
     Object.entries(CONTROL_LAYER_IDS).map(([role, id]) => {
-      const layer = catalog.get(id);
+      // Retired layers are constructed but never registered, so the control
+      // surface still receives a real instance for its wiring. The manager
+      // never enables one, so it stays inert.
+      const layer = catalog.get(id) || catalog.retired?.get?.(id);
       if (!layer)
         throw new TypeError(`Control layer missing from catalog: ${id}`);
       return [role, layer];

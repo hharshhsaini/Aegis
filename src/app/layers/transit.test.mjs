@@ -72,8 +72,10 @@ test('the catalog hands transit the same surface it hands everything else', asyn
     signal: lifetime.signal,
     surface,
   });
-  const transit = catalog.get('transit');
-  assert.ok(transit, 'transit is in the catalog');
+  // Transit is retired: constructed with the shared surface, never registered.
+  const transit = catalog.retired.get('transit');
+  assert.equal(catalog.get('transit'), undefined, 'transit is unregistered');
+  assert.ok(transit, 'transit is still constructed');
   const lat = 30.2672;
   const lon = -97.7431;
   await surface.groundFloor.resolveGroundFloorCells([{ lat, lon }]);

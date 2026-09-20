@@ -21,10 +21,7 @@ function fixture(t, exports = {}) {
     mkdirSync(path.dirname(path.join(root, name)), { recursive: true });
     writeFileSync(path.join(root, name), source);
   };
-  write(
-    'package.json',
-    JSON.stringify({ name: '@gods-eye-view/core', exports }),
-  );
+  write('package.json', JSON.stringify({ name: '@aegis/core', exports }));
   write('src/data/feedState.js');
   return { root, write };
 }
@@ -151,7 +148,7 @@ for (const [name, files, pattern] of [
 
 test('self package imports cannot evade portable ownership', (t) => {
   const { root, write } = fixture(t, { './view': './src/ui/view.js' });
-  write('src/sources/demo.js', "import '@gods-eye-view/core/view';");
+  write('src/sources/demo.js', "import '@aegis/core/view';");
   write('src/ui/view.js');
   assert.throws(() => checkImportDirections(root), /Source imports rendering/);
 });

@@ -1,6 +1,9 @@
 import { CockpitViewController, CockpitDisplayPortal } from './cockpit.js';
 import { STYLE_STATUS_LABELS } from './visualPresets.js';
-import { cockpitEntryAllowed } from '../contextModePolicy.js';
+import {
+  cockpitEntryAllowed,
+  militaryContactsSatisfied,
+} from '../contextModePolicy.js';
 import { formatAwarenessLabel } from '../data/militaryAwarenessEngine.js';
 import { enterCockpitWithTracking } from '../cockpitTracking.js';
 
@@ -82,7 +85,7 @@ export class CockpitCoordinator {
           contextMode: this._contextMode,
           contextModeChanging: this._contextModeChanging,
           flightsEnabled: !!this._dataManager?.isEnabled('flights'),
-          militaryEnabled: !!this._dataManager?.isEnabled('military'),
+          militaryEnabled: militaryContactsSatisfied(this._dataManager),
         }),
       onEntered: () => this.enterPanels(),
       onExited: () => this.exitPanels(),

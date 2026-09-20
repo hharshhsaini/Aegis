@@ -10,8 +10,27 @@
   <!-- Title -->
   <div id="title-bar">
     <div class="title-glow"></div>
-    <h1><span class="title-logo brand-logo" data-logo-gaze data-logo-src="/logo.svg" aria-hidden="true"><img src="/logo.svg" alt="" /></span> <span>GOD'S EYE <span class="title-accent">VIEW</span></span></h1>
-    <p class="subtitle">NO PLACE LEFT BEHIND</p>
+    <h1><span class="title-logo brand-logo" data-logo-gaze data-logo-src="/logo.svg" aria-hidden="true"><img src="/logo.svg" alt="" /></span> <span><span class="title-accent">AEGIS</span></span></h1>
+    <!-- Two lines under the wordmark, and nothing else.
+         This replaced a seven-cell telemetry strip (MODE/SYSTEM/DATA/REGION/
+         MONITORING/UTC/LAST SYNC). Those are implementation facts: an operator
+         needs to know that Aegis is watching and where, and everything else is
+         available on hover or in the panel that owns it. The dot carries feed
+         health, so a degraded feed still shows here without a cell of its own,
+         and the state word carries the one distinction that must never be
+         missed — live monitoring versus authored scenario playback. -->
+    <div id="aegis-status-chip" data-mode="LIVE" aria-label="Aegis status">
+      <p class="aegis-chip-state">
+        <span class="aegis-chip-dot" id="aegis-status-dot" data-tone="idle" aria-hidden="true"></span>
+        <span id="aegis-mode" data-mode="LIVE">MONITORING</span>
+      </p>
+      <p class="aegis-chip-place" id="aegis-chip-place">&mdash;</p>
+      <!-- Shown only while the camera is somewhere other than the place being
+           monitored. Two locations are in play — where the user IS and where
+           they are LOOKING — and without this line the console looks like it
+           is ignoring the globe when it is in fact following it. -->
+      <p class="aegis-chip-viewing" id="aegis-chip-viewing" hidden></p>
+    </div>
   </div>
 
   <!-- Style indicator -->
@@ -50,6 +69,18 @@
   <div id="cctv-sync-chip" aria-live="polite">
     <span id="cctv-sync-label">loading frames</span>
     <span id="cctv-sync-progress">0/0</span>
+  </div>
+
+  <!-- Voice alert card. Compact by design: a full-screen popup for every
+       announcement is how an alert layer gets muted. -->
+  <div id="voice-alert-card" class="aegis-voice-alert" hidden role="status" aria-live="polite">
+    <div class="aegis-voice-alert-head">
+      <span class="aegis-voice-alert-kicker">AEGIS VOICE ALERT</span>
+      <span id="voice-alert-card-level" class="aegis-voice-alert-level">NOTICE</span>
+    </div>
+    <p id="voice-alert-title" class="aegis-voice-alert-title"></p>
+    <p id="voice-alert-distance" class="aegis-voice-alert-distance"></p>
+    <p id="voice-alert-meta" class="aegis-voice-alert-meta"></p>
   </div>
 
   <!-- Toast notification -->

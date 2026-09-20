@@ -1,0 +1,450 @@
+/* ═══════════════════════════════════════════════
+   AEGIS — Startup sequence
+   Purely typographic. No emblem, no orb, no stand-in
+   globe: the real Cesium globe is what this hands
+   over to, and a second fake one competing with it
+   for the same seconds was the weakest part of the
+   reveal. Drawn entirely from `data-phase`.
+   ═══════════════════════════════════════════════ */
+
+#loading-screen {
+  /* The sequence opens from true black; the app's near-black would already
+     read as "a screen". */
+  background: #000;
+}
+
+.aegis-intro {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.aegis-intro-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+}
+
+/* ── Phase 1: the rule ────────────────────────
+   One hairline is the entire opening image. It widens out of nothing, which
+   reads as a system drawing its first breath rather than a page loading. */
+
+.aegis-intro-rule {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 1px;
+  width: 0;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent),
+    transparent
+  );
+  opacity: 0;
+  transition:
+    width 900ms cubic-bezier(0.16, 0.8, 0.3, 1),
+    opacity 500ms ease;
+}
+
+[data-phase='rule'] .aegis-intro-rule,
+[data-phase='fragments'] .aegis-intro-rule {
+  width: 280px;
+  opacity: 1;
+}
+
+/* Once the letters own the centre, the rule gets out of their way. */
+[data-phase='forming'] .aegis-intro-rule,
+[data-phase='scan'] .aegis-intro-rule {
+  width: 420px;
+  opacity: 0.25;
+}
+
+[data-phase='settled'] .aegis-intro-rule,
+[data-phase='subtitle'] .aegis-intro-rule,
+[data-phase='online'] .aegis-intro-rule,
+[data-phase='begin'] .aegis-intro-rule {
+  width: 460px;
+  opacity: 0;
+}
+
+/* ── Phases 2-4: the wordmark ─────────────────
+   Five letters, each its own element, so the name ASSEMBLES. A block fade
+   would say "an image loaded"; letters arriving from small offsets and then
+   snapping into alignment says "this was resolved". */
+
+.aegis-intro-word {
+  display: flex;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(30px, 8vw, 54px);
+  font-weight: 300;
+  color: var(--text-primary);
+  /* Wide while assembling, tightened at the end — the tracking change is the
+     main event of the animation. */
+  letter-spacing: 0.62em;
+  text-indent: 0.62em;
+  transition: letter-spacing 1100ms cubic-bezier(0.16, 0.8, 0.3, 1);
+}
+
+.aegis-intro-letter {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  /* Each letter starts slightly off its final position. The alternating
+     direction is done with nth-child rather than arithmetic on --i: CSS calc()
+     has no conditional, and a ternary written inside one is simply an invalid
+     declaration the browser drops — which would leave the letters with no
+     offset at all and no error to notice. */
+  transform: translateY(-9px);
+  transition:
+    opacity 520ms ease,
+    filter 620ms ease,
+    transform 620ms cubic-bezier(0.16, 0.8, 0.3, 1);
+  /* Staggered so the word resolves left to right. */
+  transition-delay: calc(var(--i) * 90ms);
+}
+
+.aegis-intro-letter:nth-child(even) {
+  transform: translateY(9px);
+}
+
+/* Fragments: present, but not yet legible. */
+[data-phase='fragments'] .aegis-intro-letter {
+  opacity: 0.35;
+  filter: blur(5px);
+  transform: translateY(0) scaleY(0.82);
+}
+
+[data-phase='forming'] .aegis-intro-letter,
+[data-phase='scan'] .aegis-intro-letter {
+  opacity: 0.85;
+  filter: blur(1.5px);
+  transform: translateY(0);
+}
+
+[data-phase='settled'] .aegis-intro-letter,
+[data-phase='subtitle'] .aegis-intro-letter,
+[data-phase='online'] .aegis-intro-letter,
+[data-phase='begin'] .aegis-intro-letter,
+[data-phase='reconnect'] .aegis-intro-letter {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  text-shadow: 0 0 26px rgba(0, 212, 255, 0.28);
+}
+
+/* The tracking snap: the moment the word stops being an effect and becomes a
+   wordmark. */
+[data-phase='settled'] .aegis-intro-word,
+[data-phase='subtitle'] .aegis-intro-word,
+[data-phase='online'] .aegis-intro-word,
+[data-phase='begin'] .aegis-intro-word,
+[data-phase='reconnect'] .aegis-intro-word {
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;
+}
+
+/* ── Phase 5: the scan ────────────────────────
+   A thin line crossing the settled word once. Not a sweep, not a glitch: one
+   pass, like something being read. */
+
+.aegis-intro-scanline {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 212, 255, 0.16) 45%,
+    rgba(0, 212, 255, 0.5) 50%,
+    rgba(0, 212, 255, 0.16) 55%,
+    transparent
+  );
+}
+
+[data-phase='scan'] .aegis-intro-scanline {
+  animation: aegis-scan-pass 700ms ease-out both;
+}
+
+@keyframes aegis-scan-pass {
+  0% {
+    opacity: 0;
+    transform: translate(-130%, -50%);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(30%, -50%);
+  }
+}
+
+/* ── Phases 6-7: subtitle and status ──────────── */
+
+.aegis-intro-tagline,
+.aegis-intro-online,
+.aegis-intro-reconnect {
+  margin: 0;
+  font-family: var(--font-mono);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+}
+
+.aegis-intro-tagline {
+  margin-top: 18px;
+  font-size: clamp(7.5px, 1.6vw, 9.5px);
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  color: var(--accent);
+}
+
+[data-phase='subtitle'] .aegis-intro-tagline,
+[data-phase='online'] .aegis-intro-tagline,
+[data-phase='begin'] .aegis-intro-tagline {
+  opacity: 0.8;
+  transform: translateY(0);
+}
+
+.aegis-intro-online {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  color: var(--tone-ok);
+}
+
+.aegis-intro-online-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+[data-phase='online'] .aegis-intro-online,
+[data-phase='begin'] .aegis-intro-online {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* The returning visitor gets this line instead of the whole reveal. */
+.aegis-intro-reconnect {
+  margin-top: 18px;
+  font-size: 8.5px;
+  letter-spacing: 0.32em;
+  color: var(--text-dim);
+}
+
+[data-phase='reconnect'] .aegis-intro-reconnect {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-phase='reconnect'] .aegis-intro-tagline {
+  opacity: 0;
+}
+
+/* The handover: the text lifts and clears, and the console is already
+   running underneath it. */
+[data-phase='begin'] .aegis-intro-stage {
+  opacity: 0;
+  transform: translateY(-12px);
+  transition:
+    opacity 900ms ease,
+    transform 1100ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Controls ─────────────────────────────────── */
+
+.aegis-intro-skip,
+.aegis-intro-audio {
+  position: absolute;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--btn-radius);
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.26em;
+  padding: 7px 13px;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.aegis-intro-skip:hover,
+.aegis-intro-audio:hover {
+  color: var(--text-primary);
+  border-color: var(--glass-border-hover);
+}
+
+/* Deliberately quiet and deliberately reachable. It must never compete with
+   the wordmark, and it must never be a control somebody has to hunt for. */
+.aegis-intro-skip {
+  right: 28px;
+  bottom: 26px;
+}
+
+.aegis-intro-audio {
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  color: var(--accent);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* Bootstrap status stays silent unless something actually went wrong.
+   The old loader pulsed this line to show the app was alive. An animation
+   overrides a static `opacity`, so cancelling it is what actually hides the
+   text — and the sequence is now what says the system is alive. */
+#loading-screen .loader-status {
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  transform: translateX(-50%);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #ff6b6b;
+  opacity: 0;
+  animation: none;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+#loading-screen .loader-status[data-failed='true'] {
+  opacity: 1;
+}
+
+/* The handover. The overlay clears; the console is already running under it. */
+#loading-screen.hidden .aegis-intro,
+#loading-screen.aegis-intro-over .aegis-intro-skip,
+#loading-screen.aegis-intro-over .aegis-intro-audio {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-intro-ring,
+  .aegis-intro-scan,
+  .aegis-intro-mark[data-mark='quake'],
+  [data-phase='emblem'] .aegis-intro-word {
+    animation: none !important;
+  }
+  .aegis-intro-identity,
+  .aegis-intro-world,
+  .aegis-intro-mark {
+    transition-duration: 200ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .aegis-intro-word {
+    font-size: 30px;
+  }
+  .aegis-intro-tagline {
+    font-size: 8px;
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;
+  }
+  .aegis-intro-logo {
+    width: 68px;
+  }
+}
+
+/* ── The handover ─────────────────────────────────
+   While the sequence runs, the console's chrome is held back. The overlay is
+   opaque so nothing here is about concealment — it is about not delivering
+   every panel in the single frame the cover clears. Released on handover, the
+   console fades up behind the departing overlay instead of appearing under it.
+   Two things are deliberately NOT in this list. The globe, because it is what
+   the sequence hands over TO and should already be there. And the Cesium
+   credit line, because attribution is a condition of using the imagery, not
+   chrome to be tidied away for a nicer title card — suppressing it is a rule
+   the credit tests enforce, and they are right to. ── */
+
+body.aegis-booting #title-bar,
+body.aegis-booting #style-indicator,
+body.aegis-booting #top-center-actions,
+body.aegis-booting #incidents-bar,
+body.aegis-booting #command-dock,
+body.aegis-booting #intel-hud,
+body.aegis-booting #local-panel,
+body.aegis-booting #regional-panel,
+body.aegis-booting #fire-panel,
+body.aegis-booting #quake-panel,
+body.aegis-booting #intelligence-panel,
+body.aegis-booting #data-panel,
+body.aegis-booting #scene-panel,
+body.aegis-booting #cctv-panel,
+body.aegis-booting #global-context-panel,
+body.aegis-booting #control-panel,
+body.aegis-booting #location-bar,
+body.aegis-booting #pp-toggles,
+body.aegis-booting #param-slider-panel,
+body.aegis-booting #traffic-sync-chip,
+body.aegis-booting #cctv-sync-chip {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Coming back is a fade, not a cut. The title chip leads by a beat so the
+   product's own name is the first thing to settle.
+
+   The reduced-motion override lives on these custom properties rather than in
+   a media block that re-selects the dock: the credit-attribution analyser
+   reads every media condition gating `#command-dock`, and rightly refuses one
+   it has not modelled. Tuning a variable changes nothing about which
+   conditions gate the element. */
+:root {
+  --aegis-reveal-duration: 700ms;
+  --aegis-reveal-delay: 120ms;
+  --aegis-reveal-delay-late: 320ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --aegis-reveal-duration: 200ms;
+    --aegis-reveal-delay: 0ms;
+    --aegis-reveal-delay-late: 0ms;
+  }
+}
+
+#title-bar,
+#incidents-bar,
+#command-dock,
+#local-panel,
+#fire-panel,
+#quake-panel {
+  transition: opacity var(--aegis-reveal-duration) ease;
+}
+
+#title-bar {
+  transition-delay: var(--aegis-reveal-delay);
+}
+
+#incidents-bar,
+#command-dock {
+  transition-delay: var(--aegis-reveal-delay-late);
+}

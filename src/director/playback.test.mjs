@@ -196,3 +196,70 @@ test('a cleanup failure rejects for the caller to restore its own controls', asy
     (error) => error === failure,
   );
 });
+
+test('a gate suspends the run between phases and releases every waiter', async () => {
+  const { events, token, adapter } = fixture();
+  let release;
+  let gate = null;
+  const pause = () => {
+    gate = new Promise((resolve) => {
+      release = resolve;
+    });
+  };
+
+  pause();
+  const run = playSceneQueue([{ scene: scenes[0], shot: { id: 'a1' } }], {
+    token,
+    adapter,
+    gate: () => gate || Promise.resolve(),
+  });
+
+  // Nothing runs while the gate is held: the pause bites at the first phase
+  // boundary rather than after the shot completes.
+  await Promise.resolve();
+  assert.deepEqual(events, []);
+
+  gate = null;
+  release();
+  await run;
+  assert.ok(events.includes('a1:selectShot'));
+  assert.ok(events.includes('a1:completeShot'));
+});
+
+test('cancelling during a pause stops without running another phase', async () => {
+  const { events, token, adapter } = fixture();
+  let release;
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+
+  const run = playSceneQueue([{ scene: scenes[0], shot: { id: 'a1' } }], {
+    token,
+    adapter,
+    gate: () => gate,
+  });
+  await Promise.resolve();
+
+  // Stop arrives while the gate is held. Releasing it must not let one more
+  // phase through on the way out.
+  token.cancelled = true;
+  release();
+  const result = await run;
+  assert.equal(result.status, 'cancelled');
+  assert.deepEqual(
+    events.filter((event) => !event.startsWith('release:')),
+    [],
+  );
+});
+
+test('a run without a gate behaves exactly as before', async () => {
+  const { events, token, adapter } = fixture();
+  await playSceneQueue([{ scene: scenes[0], shot: { id: 'a1' } }], {
+    token,
+    adapter,
+  });
+  assert.deepEqual(
+    events.filter((event) => !event.startsWith('release:')),
+    phases.map((phase) => `a1:${phase}`).concat('complete'),
+  );
+});

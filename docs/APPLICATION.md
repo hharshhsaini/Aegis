@@ -1,6 +1,6 @@
 # Application construction
 
-`gods-eye-view/application` exports `createApplication`. Importing it does not
+`aegis/application` exports `createApplication`. Importing it does not
 create a viewer, discover configuration, start requests, or attach browser
 listeners. Construction is also inactive until the caller invokes `start()`.
 
@@ -20,8 +20,8 @@ interpret provider names, environment variables, endpoints, or module paths.
 There is no module discovery or automatic import mechanism.
 
 ```js
-import { createApplication } from 'gods-eye-view/application';
-import { createApplicationViewer } from 'gods-eye-view/application/viewer';
+import { createApplication } from 'aegis/application';
+import { createApplicationViewer } from 'aegis/application/viewer';
 
 const app = createApplication({
   createScene({ defer }) {
@@ -193,6 +193,6 @@ its pending results. Source disposal does not silently reinstate a default.
 `ui/composition` supplies the default engines to the shell. Applications can
 supply a HUD implementation or request policy through control services. The
 shared chrome owns the welcome/loading transition; standalone composition adds
-Provider Settings. `build/html` expands an allowlist of component markers from
+the provider registry. `build/html` expands an allowlist of component markers from
 `src/ui/templates`; unknown names cannot read arbitrary filesystem paths. The
 standalone document expands to the same markup as before this extraction.

@@ -9,6 +9,10 @@ import { militaryInstallationsProxy } from './military-installations.js';
 import { regionalBriefProxy } from './regional/briefing.js';
 import { geocodeProxy } from './regional/place.js';
 import { weatherEffectsProxy } from './regional/weather-effects.js';
+import { weatherIntelligenceProxy } from './weather/intelligence.js';
+import { fireIntelligenceProxy } from './fires/intelligence.js';
+import { earthquakeIntelligenceProxy } from './quakes.js';
+import { seismicForecastProxy } from './seismicForecast.js';
 import { cctvProxy } from './cctv.js';
 import { defaultSourceRoot } from './common/source-root.js';
 import { radioBrowserProxy } from './radio.js';
@@ -36,6 +40,10 @@ function localProviderPlugins() {
     regionalBriefProxy(),
     geocodeProxy(),
     weatherEffectsProxy(),
+    weatherIntelligenceProxy(),
+    fireIntelligenceProxy(),
+    earthquakeIntelligenceProxy(),
+    seismicForecastProxy(),
     cctvProxy({ sourceRoot: defaultSourceRoot }),
     radioBrowserProxy(),
     gbfsProxy(),

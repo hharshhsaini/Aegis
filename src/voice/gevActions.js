@@ -1131,7 +1131,7 @@ export function createGevActionRunner({
       return clearAnnotations(annotations);
     }
 
-    throw new Error(`Unknown GEV tool: ${name}`);
+    throw new Error(`Unknown Aegis tool: ${name}`);
   };
 }
 
@@ -3946,7 +3946,7 @@ function logSlowContext(startedAt, scope) {
   const durationMs = Math.round(performance.now() - startedAt);
   if (durationMs >= 500) {
     console.info(
-      `[GEV Voice] ${scope} scene context completed in ${durationMs}ms`,
+      `[Aegis Voice] ${scope} scene context completed in ${durationMs}ms`,
     );
   }
 }

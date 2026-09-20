@@ -39,12 +39,40 @@ test('catalogs construct distinct layers and classification from their supplied 
     signal: b.signal,
     surface: fixtureSurface(b.signal),
   });
-  assert.equal(first.layers.length, 21);
-  assert.ok(first.get('transit'));
-  const order = first.layers.map(({ id }) => id);
+  assert.equal(first.layers.length, 10);
+  // Retired layers are constructed for the control surface but never
+  // registered: the manager cannot enable one, so it renders and fetches
+  // nothing and never reaches the Data Layers panel.
+  for (const id of [
+    'military',
+    'ais-live-vessels',
+    'traffic',
+    'transit',
+    'bikeshare',
+    'cctv',
+    'alpr-cameras',
+    'military-installations',
+    'local-datacenters',
+    'directions',
+    'radio',
+  ]) {
+    assert.equal(first.get(id), undefined, `${id} must not be registered`);
+    assert.ok(first.retired.get(id), `${id} remains constructed for controls`);
+  }
   assert.deepEqual(
-    order.slice(order.indexOf('traffic'), order.indexOf('directions') + 1),
-    ['traffic', 'cctv', 'radio', 'transit', 'bikeshare', 'directions'],
+    first.layers.map(({ id }) => id),
+    [
+      'bhote-koshi-2026',
+      'bhote-koshi-locator',
+      'flights',
+      'earthquakes',
+      'satellites',
+      'rocket-launches',
+      'military-awareness',
+      'local-dams',
+      'telegeography-submarine-cables',
+      'local-firms',
+    ],
   );
   assert.ok(first.get('bhote-koshi-2026'));
   assert.ok(first.get('bhote-koshi-locator'));

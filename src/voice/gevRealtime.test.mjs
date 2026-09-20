@@ -3551,7 +3551,7 @@ test('a typed command drops the old response’s queued follow-up confirmation',
   controller.setVoiceSpeaker = () => {};
   controller.recordUsage = () => {};
   controller.updateResponseState({ type: 'response.created', response: { id: 'resp_old' } });
-  controller.queueResponseCreate('Briefly confirm the completed GEV action once.');
+  controller.queueResponseCreate('Briefly confirm the completed Aegis action once.');
   assert.ok(controller.pendingResponseInstructions, 'a follow-up is queued behind the active response');
 
   controller.sendTextCommand('stop');

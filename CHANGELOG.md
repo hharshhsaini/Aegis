@@ -1,5 +1,34 @@
 # Changelog
 
+- Add the Aegis seismic forecasting pipeline: USGS FDSN historical catalogs feed
+  a leakage-guarded feature builder, a time-split logistic-regression model
+  trained offline by `scripts/train-seismic-model.mjs`, an independent Poisson
+  anomaly detector, and a per-region prior correction. `/api/quakes/forecast`
+  serves the probability with its target definition, baseline, drivers and
+  held-out validation metrics; Amazon Bedrock narrates through a real SigV4
+  client, invoked only on material change or an operator question. Forecasts
+  seismic activity level — never a specific earthquake. See
+  docs/SEISMIC-FORECASTING.md and docs/SEISMIC-MODEL-EVALUATION.md.
+
+- Add the Aegis Fire Intelligence layer: NASA FIRMS VIIRS near-real-time
+  detections for the viewport's bounding box, clustered into active fire
+  clusters and correlated with Open-Meteo weather for fire-spread conditions,
+  a wind-derived potential spread direction, activity trend against the previous
+  observation and `FIRE_*` events. Served by `/api/fires/intelligence` with a
+  shared 5° cache grid, 15-minute cadence, request coalescing and stale
+  fallback; the MAP_KEY stays server-side and is redacted from responses and
+  errors. Detections are reported as satellite thermal anomalies, never as
+  confirmed fires. See docs/FIRE-INTELLIGENCE.md.
+
+- Add the Aegis Weather Intelligence Engine: one batched Open-Meteo request per
+  location feeds a deterministic risk engine scoring flood, flash flood, wind
+  and storm, fire-spread conditions, heat and visibility 0-100 with ranked
+  drivers, forecast windows at +3/6/12/24 h, trends against the previous
+  analysis and `WEATHER_CHANGE_DETECTED` events. Served by
+  `/api/weather/intelligence` with caching, request coalescing and stale
+  fallback; presented in the AEGIS INTELLIGENCE panel and one restrained globe
+  overlay drawn only at MODERATE or above. See docs/WEATHER-INTELLIGENCE.md.
+
 - Distinguish PARTIAL vessel snapshots from STALE data in the layer panel, with
   accepted-record counts and unchanged retention, freshness and outage safeguards.
 
@@ -571,7 +600,7 @@ of current runtime behavior, see [`docs/CURRENT-STATE.md`](docs/CURRENT-STATE.md
 - Separate explicit browser build settings from standalone environment loading
   and local provider middleware. Preserve provider behavior and root named exports.
 - Rename standalone browser startup to `src/standalone/` and add a Node-only
-  `gods-eye-view/build/vite` export with checked package ownership.
+  `aegis/build/vite` export with checked package ownership.
 
 ### Development
 

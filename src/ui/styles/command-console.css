@@ -1,0 +1,800 @@
+/* ═══════════════════════════════════════════════
+   AEGIS — Command console chrome
+   The top status strip and the incident scenario
+   control. Both exist to answer "what am I
+   looking at" before anything else on screen.
+   ═══════════════════════════════════════════════ */
+
+/* ── Aegis status chip ─────────────────────────
+   Two lines under the wordmark, replacing a seven-cell telemetry strip.
+   The globe is the product; this is the smallest thing that can say
+   "Aegis is watching, and here". ── */
+
+#title-bar .subtitle {
+  display: none;
+}
+
+#aegis-status-chip {
+  margin-top: 10px;
+  max-width: 260px;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.aegis-chip-state {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+/* Feed health, carried by one dot instead of a SYSTEM and a DATA cell. */
+.aegis-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--tone-idle);
+  box-shadow: 0 0 6px currentColor;
+}
+
+.aegis-chip-dot[data-tone='ok'] {
+  background: var(--tone-ok);
+  color: var(--tone-ok);
+  animation: aegis-chip-breathe 3.4s ease-in-out infinite;
+}
+.aegis-chip-dot[data-tone='warn'] {
+  background: var(--tone-warn);
+  color: var(--tone-warn);
+}
+.aegis-chip-dot[data-tone='alert'] {
+  background: var(--tone-alert);
+  color: var(--tone-alert);
+  animation: aegis-chip-breathe 1.4s ease-in-out infinite;
+}
+.aegis-chip-dot[data-tone='idle'] {
+  background: var(--tone-idle);
+  color: var(--tone-idle);
+}
+
+/* A slow breath, not a blink: it should read as alive, never as an alarm. */
+@keyframes aegis-chip-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.aegis-chip-place {
+  margin: 3px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  /* Geocoders return title case ("Chamorshi Taluka"); the console speaks in
+     caps. Done in CSS so the underlying name stays readable to a screen
+     reader and to anything that copies it. */
+  text-transform: uppercase;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The viewed location, shown only while it differs from the monitored one.
+   Quieter than the line above: it is where the user is LOOKING, not what
+   Aegis is watching on their behalf. */
+.aegis-chip-viewing {
+  margin: 2px 0 0;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Where the camera is, not where the user is: quieter, because it is not
+   what Aegis is watching on their behalf. */
+.aegis-chip-place[data-monitored='false'] {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+/* Authored playback must never read as live monitoring. */
+#aegis-status-chip[data-mode='SCENARIO'] .aegis-chip-state {
+  color: #ffb347;
+}
+
+#aegis-status-chip[data-mode='SCENARIO'] .aegis-chip-dot {
+  background: #ffb347;
+  color: #ffb347;
+  animation: aegis-chip-breathe 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-chip-dot {
+    animation: none !important;
+  }
+}
+
+/* ── Incidents board ────────────────────────────────
+   Anchored above the command dock rather than docked in a rail: the rails
+   budget their height and collapse their lower panels when the analysis
+   panels grow, which hid the launcher outright once a location was analyzed.
+   The board that tells an operator what is happening must not be the first
+   thing to vanish when things start happening. */
+
+#incidents-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 104px;
+  transform: translateX(-50%);
+  z-index: 101;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 18px;
+  width: min(1020px, calc(100vw - 120px));
+  padding: 10px 16px;
+  border-radius: var(--panel-radius);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+/* Authored playback marks the whole board, so the control an operator used to
+   start it also shows that it is still going. */
+#incidents-bar[data-running='true'] {
+  border-color: rgba(255, 179, 71, 0.38);
+  background: rgba(30, 20, 10, 0.78);
+}
+
+/* --- The list ------------------------------------------------------------ */
+
+.incidents-board {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.incidents-head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.incidents-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: var(--text-dim);
+}
+
+.incidents-count {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.incidents-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* The board holds up to a dozen incidents; it scrolls rather than growing
+     into the globe. */
+  max-height: 104px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+
+.incidents-empty {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
+.incident-row-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 3px 6px;
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.incident-row-button:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.incident-row[data-selected='true'] .incident-row-button {
+  background: rgba(0, 212, 255, 0.08);
+  border-left-color: var(--accent);
+}
+
+.incident-row-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tone-idle);
+}
+
+/* Severity colour comes from the same bands the risk panels use, so a row and
+   the panel it opens never disagree about how bad something is. */
+.incident-row[data-level='LOW'] .incident-row-dot {
+  background: #9bd94a;
+}
+.incident-row[data-level='MODERATE'] .incident-row-dot {
+  background: #ffd23f;
+}
+.incident-row[data-level='ELEVATED'] .incident-row-dot {
+  background: #ff8c42;
+}
+.incident-row[data-level='HIGH'] .incident-row-dot {
+  background: #ff4d4d;
+}
+
+/* Provenance, carried by shape beside the severity dot. ● observed,
+   ◇ model or forecast, ▲ official warning, ◼ authored scenario. Never the only
+   place the distinction appears — the card and the voice both say it in
+   words — but the one place it is visible while scanning a list. */
+.incident-row-provenance {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1;
+  color: var(--text-dim);
+}
+
+.incident-row-provenance[data-source-type='OFFICIAL'] {
+  color: var(--tone-alert);
+}
+
+.incident-row-provenance[data-source-type='MODEL'],
+.incident-row-provenance[data-source-type='FORECAST'] {
+  color: var(--tone-idle);
+}
+
+.incident-row-provenance[data-source-type='SCENARIO'] {
+  color: #ffb347;
+}
+
+.incident-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.incident-row-title {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.incident-row-place {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.incident-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.incident-row-badge {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+}
+
+/* An authored row is marked on the row itself, not only in the mode banner. */
+.incident-row-badge[data-kind='SCENARIO'] {
+  color: #ffb347;
+  border-color: rgba(255, 179, 71, 0.4);
+  background: rgba(255, 179, 71, 0.08);
+}
+
+.incident-row-age {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-dim);
+  min-width: 46px;
+  text-align: right;
+}
+
+/* --- Selected incident --------------------------------------------------- */
+
+.incident-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  padding-left: 18px;
+  border-left: 1px solid var(--glass-border);
+}
+
+.incident-detail-title {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.incident-detail-meta {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aegis-incident-progress {
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+#incident-progress-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), #ffb347);
+  transition: width 400ms linear;
+}
+
+.aegis-incident-phase {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  min-height: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Controls ------------------------------------------------------------ */
+
+.aegis-incident-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aegis-incident-controls .scene-btn {
+  white-space: nowrap;
+}
+
+.aegis-incident-controls .scene-btn:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+.scene-btn-primary {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-dim);
+}
+
+.scene-btn-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── Responsive ────────────────────────────────────
+   The chip is already two short lines, so it does not shed cells the way the
+   old strip did. It only tightens. */
+
+@media (max-width: 1279px) {
+  #aegis-status-chip {
+    max-width: 200px;
+  }
+}
+
+@media (max-height: 760px) {
+  #aegis-status-chip {
+    margin-top: 7px;
+  }
+}
+
+/* The bar sheds its least load-bearing parts first. The controls and the state
+   chip survive to the narrowest supported width, because a launcher that is
+   present but unusable is worse than one that is merely plain. */
+@media (max-width: 1439px) {
+  #incidents-bar {
+    gap: 12px;
+    width: calc(100vw - 80px);
+  }
+}
+
+@media (max-width: 1279px) {
+  /* Below this the detail column is the first thing to go: the list and the
+     controls are what an operator acts on. */
+  #incidents-bar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 8px 12px;
+  }
+  #incidents-bar .incident-detail {
+    display: none;
+  }
+}
+
+/* ── Right intelligence rail ────────────────────────
+   Fire and earthquake used to anchor themselves to the viewport separately —
+   `top: 50vh` on one, `bottom: 96px` on the other — which meant that at common
+   window heights they overlapped by a couple of hundred pixels with neither
+   one aware of the other. The rail replaces both anchors with one column, so
+   the panels stack, gap, and scroll as a group and cannot collide. */
+
+#right-intel-rail {
+  position: fixed;
+  right: var(--right-rail-x);
+  /* Starts below the DISPLAY/CONTEXT rail, which owns the upper right. */
+  top: 42vh;
+  bottom: 96px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 300px;
+  pointer-events: none;
+  /* The column can exceed its corridor when both panels are expanded and full
+     of content. Scrolling the rail keeps every control reachable instead of
+     letting the lower panel run off the bottom of the screen. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+#right-intel-rail > * {
+  pointer-events: auto;
+}
+
+/* The panels now flow inside the rail, so their own viewport anchors have to
+   go; leaving them would take the panel back out of the column it belongs to. */
+#right-intel-rail #fire-panel,
+#right-intel-rail #quake-panel {
+  position: relative;
+  right: auto;
+  top: auto;
+  bottom: auto;
+  flex: none;
+  /* Each panel keeps a cap so one busy feed cannot push the other out of the
+     corridor entirely; the rail scrolls if both are large. */
+  max-height: none;
+}
+
+/* Sized so both panels fit the corridor at 1080p without the rail scrolling;
+   the rail's own scroll is the fallback for shorter windows, not the norm. */
+#right-intel-rail #fire-panel .aegis-fire-body,
+#right-intel-rail #quake-panel .aegis-quake-body {
+  max-height: 21vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* One panel open gets the room both would have shared. */
+#right-intel-rail:has(> .collapsed) #fire-panel .aegis-fire-body,
+#right-intel-rail:has(> .collapsed) #quake-panel .aegis-quake-body {
+  max-height: 44vh;
+}
+
+/* A collapsed panel is a header only and should not reserve column width. */
+#right-intel-rail > .collapsed {
+  width: var(--left-collapsed-width);
+}
+
+@media (max-width: 1439px) {
+  #right-intel-rail {
+    width: 272px;
+    top: 38vh;
+  }
+  #right-intel-rail #fire-panel .aegis-fire-body,
+  #right-intel-rail #quake-panel .aegis-quake-body {
+    max-height: 19vh;
+  }
+}
+
+@media (max-width: 720px) {
+  #right-intel-rail {
+    top: auto;
+    bottom: 108px;
+    max-height: 46vh;
+    width: min(300px, calc(100vw - 32px));
+  }
+}
+
+/* Below roughly 1400px the centred incident bar is wide enough to reach under
+   the right rail — the bar cannot narrow past its own controls, and the rail
+   cannot move further right. The rail stops above the bar instead of the two
+   sharing pixels; it already scrolls, so it loses no content by ending higher.
+   Measured at 1280x720, where the two overlapped by 32x77. */
+@media (max-width: 1400px) {
+  #right-intel-rail {
+    bottom: 200px;
+  }
+}
+
+/* ── Panel interactivity and width, inside the rails ────────────────────────
+
+   Two defects lived here, both invisible until the window got narrow.
+
+   1. SCROLL. #left-panel-stack sets `pointer-events: none` so the globe stays
+      draggable in the gaps between its panels, and each panel is expected to
+      switch them back on. A panel positioned `relative` inside the stack never
+      did, so the whole AEGIS INTELLIGENCE panel was transparent to the pointer:
+      a wheel over its risk list reached the Cesium canvas underneath and zoomed
+      the globe instead of scrolling the list, which simply read as "scrolling
+      is broken". The panels below the fold were unreachable.
+
+   2. WIDTH. The panels carry a `max-width: 900px` rule giving them
+      `calc(100vw - 32px)` — written when each one positioned itself against the
+      viewport. Now that they sit inside a fixed-width rail, that rule makes an
+      838px panel inside a 272px column, and the rail's overflow clips the
+      right-hand side off: the LIVE chip, the refresh control and the collapse
+      button all disappear, which read as "the fire and earthquake buttons do
+      not work". They were there; they were just past the clip. */
+
+#left-panel-stack > [data-panel-id] {
+  pointer-events: auto;
+}
+
+/* A panel in a rail is as wide as its rail. The viewport-relative width is for
+   a panel that anchors itself to the viewport, which these no longer do. */
+#left-panel-stack > [data-panel-id],
+#right-intel-rail > [data-panel-id] {
+  width: 100%;
+  max-width: 100%;
+}
+
+#right-intel-rail > [data-panel-id].collapsed {
+  width: 100%;
+}
+
+/* The rail follows the same narrow-viewport rule its panels do, so a small
+   window widens the column instead of clipping what is inside it. */
+@media (max-width: 900px) {
+  #right-intel-rail {
+    width: min(300px, calc(100vw - 32px));
+  }
+}
+
+/* ── Shared intelligence panel chrome ───────────────
+   The fire and earthquake panels had each grown their own sizing, which is how
+   they ended up tall, padded and mostly empty. Height is content-driven here;
+   the body scrolls only when it genuinely exceeds the corridor, and a collapsed
+   panel is its header and one line — never an empty container reserving space
+   for content it is not showing. */
+
+#right-intel-rail > [data-panel-id] {
+  /* Content-driven: no min-height, no fixed height, no 100%. */
+  height: auto;
+  min-height: 0;
+  flex: 0 0 auto;
+}
+
+#right-intel-rail .aegis-fire-inner,
+#right-intel-rail .aegis-quake-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 10px 12px 12px;
+}
+
+/* The header stays put; only the body below it scrolls, so the collapse
+   control is always reachable however long the content is. */
+/* The header is a shrink-to-fit row, and the collapse control is the one thing
+   in it that must never move.
+
+   Without this the row simply overflowed: the title, the status chip, the
+   divider and the refresh button all refused to shrink, so a long title pushed
+   the collapse button past the panel's own edge. FIRE INTELLIGENCE landed 14px
+   outside; EARTHQUAKE INTELLIGENCE — five characters longer — landed 64px out,
+   past the right edge of a 1024px viewport, which is why that panel appeared to
+   have no minimize button at all. It was there, just off-screen.
+
+   So: the title is the only flexible part and it ellipsises, everything else is
+   `flex: none`, and the header clips rather than spilling. */
+#right-intel-rail .panel-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#right-intel-rail .panel-header .panel-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The divider is decorative; it yields all its width before anything else. */
+#right-intel-rail .panel-header .panel-divider {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+#right-intel-rail .panel-header .aegis-feed-chip,
+#right-intel-rail .panel-header button {
+  flex: 0 0 auto;
+}
+
+#right-intel-rail .aegis-fire-body,
+#right-intel-rail .aegis-quake-body {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* A collapsed panel shows its header and its summary line, nothing else. */
+#right-intel-rail > .collapsed .aegis-fire-body,
+#right-intel-rail > .collapsed .aegis-quake-body {
+  display: none;
+}
+
+.aegis-panel-summary {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  padding: 6px 0 2px;
+}
+
+/* The status line is a sentence, not a paragraph block: an empty one should
+   take no vertical space at all. */
+.aegis-fire-status:empty,
+.aegis-quake-status:empty {
+  display: none;
+}
+
+.aegis-fire-status,
+.aegis-quake-status {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  padding: 2px 0;
+}
+
+/* ── Panel footer: action then attribution ───────── */
+
+.aegis-panel-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.aegis-panel-action {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-dim);
+  transition: background var(--transition-fast);
+}
+
+.aegis-panel-action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.aegis-panel-action:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+}
+
+#fire-panel .aegis-panel-action {
+  color: var(--fire-moderate, #ff8c42);
+  border-color: rgba(255, 140, 66, 0.45);
+  background: rgba(255, 140, 66, 0.12);
+}
+
+#fire-panel .aegis-panel-action:hover:not(:disabled) {
+  background: rgba(255, 140, 66, 0.22);
+}
+
+.aegis-panel-source-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+
+/* ── Collapse control ───────────────────────────────
+   Always the last thing in the header, always the same size, in both panels. */
+
+#right-intel-rail .panel-collapse-btn {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 5px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.03);
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+#right-intel-rail .panel-collapse-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--glass-border-hover);
+}

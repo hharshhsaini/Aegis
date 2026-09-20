@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   GOD'S EYE VIEW — Dark Sci-Fi UI
+   AEGIS — Dark Sci-Fi UI
    Apple meets Blade Runner
    ═══════════════════════════════════════════════ */
 
@@ -271,7 +271,7 @@ body.cockpit-mode #cockpit-cloud-effects.active {
    Styled to be unobtrusive but legible against the dark UI. */
 #cesium-credits {
   position: fixed;
-  /* Bottom-LEFT corner, mirrored from the GEV mic pill (right:36/bottom:36) so the two bottom
+  /* Bottom-LEFT corner, mirrored from the Aegis mic pill (right:36/bottom:36) so the two bottom
      corners are symmetric; sits below the coordinate HUD (.hud-bottom-left, bottom:180). Was
      dead-center at the bottom, tucked under the LOCATIONS/STYLE panels. Must stay visible (Google
      /Cesium attribution ToS). */
@@ -368,7 +368,7 @@ body:has(.data-toggle-row[data-layer-id='alpr-cameras'] .data-toggle-btn.active)
    and launch videos, so hiding #cesium-credits here (as it was before) shipped
    non-compliant footage. The full credit line — Cesium/Ion logo, "Google Maps",
    and the "Data attribution" link that opens the per-layer license popover —
-   stays on screen; it's already styled small and unobtrusive above. The GEV
+   stays on screen; it's already styled small and unobtrusive above. The Aegis
    chrome (panels/HUD) still fades via its own rules; only the required notice
    is exempt. (Note: Cesium re-applies inline styles on the credit elements each
    frame, so the on-screen credit content is owned by Cesium's update loop, not

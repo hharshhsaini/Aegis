@@ -119,7 +119,7 @@ export function buildVesselCardManifest({
     screenshot,
     dataMode,
     provenance: provenanceSlug,
-    source: dataMode === 'live' ? 'AISStream live feed' : 'GEV synthetic AIS fixture',
+    source: dataMode === 'live' ? 'AISStream live feed' : 'Aegis synthetic AIS fixture',
     liveAisStreamAvailabilityAsserted: dataMode === 'live',
     launchMode: headful ? 'headful' : 'headless',
     renderer,

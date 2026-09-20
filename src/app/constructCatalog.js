@@ -10,10 +10,10 @@ import { createApplicationTraffic } from './layers/traffic.js';
 import { createApplicationBikeshare } from './layers/bikeshare.js';
 import { createApplicationDirections } from './layers/directions.js';
 import { createApplicationTransit } from './layers/transit.js';
+import { createApplicationAlpr } from './layers/alprCameras.js';
 import { createApplicationInstallations } from './layers/militaryInstallations.js';
 import { createApplicationSatellites } from './layers/satellites.js';
 import { createApplicationLaunches } from './layers/rocketLaunches.js';
-import { createApplicationAlpr } from './layers/alprCameras.js';
 import { createApplicationAwareness } from './layers/militaryAwareness.js';
 import { createApplicationFirms } from './layers/firms.js';
 import { createApplicationEarthquakes } from './layers/earthquakes.js';
@@ -45,6 +45,31 @@ const SOURCE_METHODS = Object.freeze({
   earthquakes: ['getSnapshot'],
   cables: ['fetch'],
 });
+
+/**
+ * Layers retired from the Aegis catalog.
+ *
+ * A retired layer is still CONSTRUCTED — Contacts (`military-awareness`) reads
+ * the flight/vessel/installation instances directly, and the control surface
+ * wires several of the others into panels and camera handoffs — but it is never
+ * REGISTERED. The manager therefore cannot enable it, so it renders nothing,
+ * fetches nothing, and never appears in the Data Layers panel. The instances
+ * stay reachable through `catalog.retired` so that existing control wiring
+ * keeps its shape until the modules themselves are deleted.
+ */
+const RETIRED_LAYER_IDS = new Set([
+  'military',
+  'ais-live-vessels',
+  'traffic',
+  'transit',
+  'bikeshare',
+  'cctv',
+  'alpr-cameras',
+  'military-installations',
+  'local-datacenters',
+  'directions',
+  'radio',
+]);
 
 /** Construct the current catalog without choosing any source provider.
  * Scene engines remain page-owned; layers and classification have this app's lifetime.
@@ -102,46 +127,57 @@ export function createApplicationCatalog({
     const satellites = createApplicationSatellites({
       source: sources.satellites,
     });
-    const catalog = createLayerCatalog(
-      [
-        createBhoteKoshiEventLayer(),
-        createBhoteKoshiLocatorLayer({
-          boundaryResolver: nepalBoundaryResolver,
-        }),
+    const constructed = [
+      createBhoteKoshiEventLayer(),
+      createBhoteKoshiLocatorLayer({
+        boundaryResolver: nepalBoundaryResolver,
+      }),
+      flights,
+      military,
+      createApplicationEarthquakes({ source: sources.earthquakes }),
+      createApplicationAlpr({ surface, source: sources.alpr }),
+      satellites,
+      createApplicationLaunches({ source: sources.launches, satellites }),
+      createApplicationTraffic({ source: sources.traffic }),
+      createApplicationCctv({ surface, source: sources.cctv }),
+      createApplicationRadio({ surface, source: sources.radio }),
+      createApplicationTransit({ surface, source: sources.transit }),
+      createApplicationBikeshare({ source: sources.bikeshare }),
+      createApplicationDirections(),
+      vessels,
+      installations,
+      createApplicationAwareness({
         flights,
         military,
-        createApplicationEarthquakes({ source: sources.earthquakes }),
-        createApplicationAlpr({ surface, source: sources.alpr }),
-        satellites,
-        createApplicationLaunches({ source: sources.launches, satellites }),
-        createApplicationTraffic({ source: sources.traffic }),
-        createApplicationCctv({ surface, source: sources.cctv }),
-        createApplicationRadio({ surface, source: sources.radio }),
-        createApplicationTransit({ surface, source: sources.transit }),
-        createApplicationBikeshare({ source: sources.bikeshare }),
-        createApplicationDirections(),
         vessels,
         installations,
-        createApplicationAwareness({
-          flights,
-          military,
-          vessels,
-          installations,
-        }),
-        ...createInfrastructureLayers(localGeoJsonServices),
-        createApplicationCables({ source: sources.cables }),
-        createApplicationFirms({
-          surface,
-          id: 'local-firms',
-          name: 'FIRMS Active Fires',
-          icon: '▲',
-          source: 'NASA FIRMS · LIVE',
-          feed: sources.firms,
-        }),
-      ],
-      metadata,
+      }),
+      ...createInfrastructureLayers(localGeoJsonServices),
+      createApplicationCables({ source: sources.cables }),
+      createApplicationFirms({
+        surface,
+        id: 'local-firms',
+        name: 'FIRMS Active Fires',
+        icon: '▲',
+        source: 'NASA FIRMS · LIVE',
+        feed: sources.firms,
+      }),
+    ];
+    const retired = new Map(
+      constructed
+        .filter((layer) => RETIRED_LAYER_IDS.has(layer.id))
+        .map((layer) => [layer.id, layer]),
     );
-    return Object.freeze({ ...catalog, militaryRegistry, surface });
+    const catalog = createLayerCatalog(
+      constructed.filter((layer) => !retired.has(layer.id)),
+      metadata.filter((entry) => !RETIRED_LAYER_IDS.has(entry?.id)),
+    );
+    return Object.freeze({
+      ...catalog,
+      retired: Object.freeze(retired),
+      militaryRegistry,
+      surface,
+    });
   } catch (error) {
     dispose();
     throw error;

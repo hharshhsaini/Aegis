@@ -8,10 +8,18 @@ const application = createStandaloneApplication({
 });
 
 application.start().catch((error) => {
-  console.error("God's Eye View initialization failed:", error);
-  const loaderStatus = document.querySelector('#loading-screen .loader-status');
-  loaderStatus.textContent = `Error: ${describeError(error)}`;
-  loaderStatus.style.color = '#ff4444';
+  console.error('Aegis initialization failed:', error);
+  const screen = document.getElementById('loading-screen');
+  const loaderStatus = screen?.querySelector('.loader-status');
+  if (loaderStatus) {
+    loaderStatus.textContent = `Error: ${describeError(error)}`;
+    // The status line is invisible during a healthy start — a console that is
+    // coming up has nothing to narrate. A failure is the one thing it must
+    // say, so it is revealed rather than left behind the sequence, and the
+    // sequence is stopped so it cannot keep playing over a dead console.
+    loaderStatus.dataset.failed = 'true';
+  }
+  if (screen) screen.dataset.phase = 'failed';
 });
 
 export { application };

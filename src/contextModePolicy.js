@@ -393,6 +393,23 @@ export function contextRestoreLayerIds(snapshot = {}) {
  * @param {boolean} input.militaryEnabled Whether Military Flights is enabled.
  * @returns {boolean} Whether cockpit entry may be offered or activated.
  */
+/**
+ * Report the Military Flights half of the cockpit's contact picture.
+ *
+ * Aegis retires that layer: it is never registered with the manager, so it can
+ * never report "enabled", and gating the cockpit on it would close the cockpit
+ * permanently. A layer that does not exist cannot be the missing feed, so an
+ * unregistered Military Flights counts as satisfied. Once it IS registered, the
+ * original rule applies unchanged — both observed-flight feeds must be live.
+ *
+ * @param {{layers?: {has?: (id: string) => boolean}, isEnabled?: (id: string) => boolean}|null} dataManager
+ * @returns {boolean} Whether military contacts block cockpit entry.
+ */
+export function militaryContactsSatisfied(dataManager) {
+  if (!dataManager?.layers?.has?.('military')) return true;
+  return Boolean(dataManager.isEnabled?.('military'));
+}
+
 export function cockpitEntryAllowed({
   contextMode,
   contextModeChanging,

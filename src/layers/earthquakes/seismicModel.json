@@ -1,0 +1,1881 @@
+{
+  "name": "Aegis Seismic Forecast",
+  "version": "v1",
+  "kind": "logistic-regression",
+  "featureNames": [
+    "count_1h",
+    "count_3h",
+    "count_6h",
+    "count_12h",
+    "count_24h",
+    "count_168h",
+    "count_720h",
+    "rate_change_6h_vs_24h",
+    "rate_change_24h_vs_7d",
+    "hours_since_last_event",
+    "hours_since_largest_7d",
+    "max_magnitude_24h",
+    "max_magnitude_7d",
+    "mean_magnitude_24h",
+    "median_magnitude_7d",
+    "magnitude_trend_24h",
+    "count_7d_above_2_5",
+    "count_7d_above_3_5",
+    "count_7d_above_4_5",
+    "count_7d_above_5_5",
+    "mean_depth_24h",
+    "min_depth_7d",
+    "shallow_fraction_7d",
+    "depth_spread_7d",
+    "count_7d_within_50km",
+    "count_7d_within_100km",
+    "count_7d_within_250km",
+    "mean_distance_from_centroid_7d",
+    "distance_from_largest_7d_km",
+    "spatial_concentration_7d",
+    "events_since_largest_7d",
+    "rate_since_largest_7d",
+    "max_significance_7d",
+    "felt_reports_7d",
+    "baseline_daily_rate_30d",
+    "ratio_24h_to_baseline",
+    "ratio_6h_to_baseline",
+    "ratio_max_mag_24h_to_7d"
+  ],
+  "weights": [
+    -0.07939252402650435,
+    0.0889511022479818,
+    0.13519234770103572,
+    0.16506182740396225,
+    0.2270838163030521,
+    0.2979536026289297,
+    0.44467241284453396,
+    -0.016015809704131006,
+    -0.010549334996046959,
+    -0.3065251774229468,
+    -0.07047097261854299,
+    0.06857183529942044,
+    0.09561005551060082,
+    -0.03886309177917461,
+    -0.2729011492064309,
+    -0.023482972097459115,
+    0.2979536026289297,
+    0.019785587946836068,
+    0.03784307418890345,
+    0.06296695334164255,
+    0.038533507286753435,
+    -0.16442513845276155,
+    0.2232081097062596,
+    0.0938005364062873,
+    0.14463455823800522,
+    0.12343527118033051,
+    0.3317695271624513,
+    0.47451890035096106,
+    0.17351374070094114,
+    -0.016498653075973112,
+    0.1687917270271351,
+    0.14126745141583766,
+    0.13641747954779174,
+    0.025384236115750202,
+    0.44389782233256325,
+    -0.10240700692964941,
+    -0.049808594080895406,
+    0.2224381326209267
+  ],
+  "bias": 0.3714443251995302,
+  "standardizer": {
+    "mean": [
+      0.21463128573522944,
+      0.6534232517226213,
+      1.2965840785808533,
+      2.5928749450227238,
+      5.183110980794605,
+      36.13693006890485,
+      150.57352294384987,
+      0.7698569089161184,
+      0.9133490348811009,
+      59.978898363224246,
+      92.92044681457585,
+      3.3388543749717465,
+      4.541078307762283,
+      2.9964966278043934,
+      3.4933031725985475,
+      -0.0056358534170938045,
+      36.13693006890485,
+      16.844597566339246,
+      6.291452866148658,
+      0.4106436006450667,
+      43.39471694811879,
+      7.852628896736805,
+      0.6972061074586355,
+      44.64967691705447,
+      0.3953965694179739,
+      1.0793138835947809,
+      4.983433514147486,
+      602.1486807885187,
+      630.900249574122,
+      0.5028500286944156,
+      20.55812930655329,
+      0.3124675623159502,
+      412.8923911449934,
+      551.0466207300982,
+      5.025626740947038,
+      0.9824408833577257,
+      0.9947910023461846,
+      0.6636441555090105
+    ],
+    "scale": [
+      0.8529558574012485,
+      1.916462580420143,
+      3.643920144421403,
+      6.806870921953759,
+      12.559642429026754,
+      61.17256504089484,
+      196.1697288543867,
+      1.061012081532667,
+      0.9591067411044183,
+      157.81570844090868,
+      52.0849999621118,
+      1.9296590569397567,
+      1.640673492116993,
+      1.7475819429470996,
+      1.3192543907509213,
+      0.18748970754615873,
+      61.17256504089484,
+      27.118798258341002,
+      13.850842377286066,
+      1.1846270478969072,
+      53.030491270737315,
+      10.389865515053641,
+      0.32227757193584394,
+      41.6162137353302,
+      1.1938635531830477,
+      2.184324693786246,
+      7.682435387808183,
+      385.49115177307357,
+      528.4686212678951,
+      0.2503978171859773,
+      51.84879069976239,
+      1.1077242488802943,
+      234.1524690051692,
+      2524.090572591911,
+      6.53404838289209,
+      1.5750920080042794,
+      2.8911935753426072,
+      0.3715185603144277
+    ]
+  },
+  "hyperParameters": {
+    "learningRate": 0.08,
+    "epochs": 600,
+    "l2": 0.01,
+    "classWeighting": true
+  },
+  "trainingLoss": [
+    {
+      "epoch": 0,
+      "loss": 0.693147
+    },
+    {
+      "epoch": 50,
+      "loss": 0.439675
+    },
+    {
+      "epoch": 100,
+      "loss": 0.428954
+    },
+    {
+      "epoch": 150,
+      "loss": 0.424805
+    },
+    {
+      "epoch": 200,
+      "loss": 0.422457
+    },
+    {
+      "epoch": 250,
+      "loss": 0.4209
+    },
+    {
+      "epoch": 300,
+      "loss": 0.419774
+    },
+    {
+      "epoch": 350,
+      "loss": 0.418919
+    },
+    {
+      "epoch": 400,
+      "loss": 0.418247
+    },
+    {
+      "epoch": 450,
+      "loss": 0.417706
+    },
+    {
+      "epoch": 500,
+      "loss": 0.417263
+    },
+    {
+      "epoch": 550,
+      "loss": 0.416894
+    },
+    {
+      "epoch": 599,
+      "loss": 0.41659
+    }
+  ],
+  "target": {
+    "thresholdMagnitude": 2.5,
+    "forecastWindowHours": 24,
+    "minimumEvents": 3
+  },
+  "targetDescription": "≥3 events M≥2.5 within 24h",
+  "baselineProbability": 0.5073,
+  "trainedAt": "2026-09-18T18:27:12.004Z",
+  "trainingData": {
+    "source": "USGS FDSN event web service",
+    "minMagnitude": 2.5,
+    "from": "2025-10-23T18:50:36.186Z",
+    "to": "2026-09-17T15:27:47.016Z",
+    "strideHours": 6,
+    "regions": [
+      "japan",
+      "california",
+      "chile",
+      "indonesia",
+      "alaska",
+      "aegean",
+      "iceland"
+    ],
+    "rows": 9022,
+    "positives": 4492,
+    "negatives": 4530,
+    "positiveRate": 0.4979,
+    "featureCount": 38,
+    "trainRows": 6821,
+    "validationRows": 2201,
+    "validationCut": "2026-06-27T10:18:29.308Z"
+  },
+  "evaluation": {
+    "samples": 2201,
+    "positives": 1032,
+    "baselineProbability": 0.5073,
+    "brierScore": 0.1169,
+    "baselineBrierScore": 0.2505,
+    "brierSkillScore": 0.5334,
+    "rocAuc": 0.9167,
+    "threshold": 0.5,
+    "confusionMatrix": {
+      "truePositives": 772,
+      "falsePositives": 132,
+      "trueNegatives": 1037,
+      "falseNegatives": 260
+    },
+    "precision": 0.854,
+    "recall": 0.7481,
+    "f1": 0.7975,
+    "accuracy": 0.8219,
+    "baselineComparison": {
+      "precision": 0.4689,
+      "recall": 1,
+      "f1": 0.6384,
+      "accuracy": 0.4689
+    },
+    "calibration": [
+      {
+        "from": 0,
+        "to": 0.1,
+        "count": 374,
+        "meanPredicted": 0.0452,
+        "observedFrequency": 0.016
+      },
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "count": 231,
+        "meanPredicted": 0.148,
+        "observedFrequency": 0.026
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "count": 170,
+        "meanPredicted": 0.2529,
+        "observedFrequency": 0.2529
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "count": 300,
+        "meanPredicted": 0.3532,
+        "observedFrequency": 0.3467
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "count": 222,
+        "meanPredicted": 0.4518,
+        "observedFrequency": 0.455
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "count": 195,
+        "meanPredicted": 0.5369,
+        "observedFrequency": 0.5538
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "count": 49,
+        "meanPredicted": 0.6431,
+        "observedFrequency": 0.7347
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "count": 4,
+        "meanPredicted": 0.7603,
+        "observedFrequency": 0.75
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "count": 58,
+        "meanPredicted": 0.8773,
+        "observedFrequency": 0.8793
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "count": 598,
+        "meanPredicted": 0.973,
+        "observedFrequency": 0.9599
+      }
+    ],
+    "verdict": "Outperforms the climatological baseline on this validation split."
+  },
+  "trainEvaluation": {
+    "samples": 6821,
+    "positives": 3460,
+    "baselineProbability": 0.5073,
+    "brierScore": 0.1393,
+    "baselineBrierScore": 0.2499,
+    "brierSkillScore": 0.4428,
+    "rocAuc": 0.8826,
+    "threshold": 0.5,
+    "confusionMatrix": {
+      "truePositives": 2599,
+      "falsePositives": 641,
+      "trueNegatives": 2720,
+      "falseNegatives": 861
+    },
+    "precision": 0.8022,
+    "recall": 0.7512,
+    "f1": 0.7758,
+    "accuracy": 0.7798,
+    "baselineComparison": {
+      "precision": 0.5073,
+      "recall": 1,
+      "f1": 0.6731,
+      "accuracy": 0.5073
+    },
+    "calibration": [
+      {
+        "from": 0,
+        "to": 0.1,
+        "count": 1033,
+        "meanPredicted": 0.0408,
+        "observedFrequency": 0.0223
+      },
+      {
+        "from": 0.1,
+        "to": 0.2,
+        "count": 568,
+        "meanPredicted": 0.1435,
+        "observedFrequency": 0.1021
+      },
+      {
+        "from": 0.2,
+        "to": 0.3,
+        "count": 540,
+        "meanPredicted": 0.2402,
+        "observedFrequency": 0.2333
+      },
+      {
+        "from": 0.3,
+        "to": 0.4,
+        "count": 573,
+        "meanPredicted": 0.3554,
+        "observedFrequency": 0.4119
+      },
+      {
+        "from": 0.4,
+        "to": 0.5,
+        "count": 867,
+        "meanPredicted": 0.4502,
+        "observedFrequency": 0.4821
+      },
+      {
+        "from": 0.5,
+        "to": 0.6,
+        "count": 706,
+        "meanPredicted": 0.5432,
+        "observedFrequency": 0.5453
+      },
+      {
+        "from": 0.6,
+        "to": 0.7,
+        "count": 318,
+        "meanPredicted": 0.6511,
+        "observedFrequency": 0.6981
+      },
+      {
+        "from": 0.7,
+        "to": 0.8,
+        "count": 531,
+        "meanPredicted": 0.7541,
+        "observedFrequency": 0.7702
+      },
+      {
+        "from": 0.8,
+        "to": 0.9,
+        "count": 540,
+        "meanPredicted": 0.8422,
+        "observedFrequency": 0.8333
+      },
+      {
+        "from": 0.9,
+        "to": 1,
+        "count": 1145,
+        "meanPredicted": 0.9807,
+        "observedFrequency": 0.9895
+      }
+    ],
+    "verdict": "Outperforms the climatological baseline on this validation split."
+  },
+  "perRegionEvaluation": [
+    {
+      "region": "Japan",
+      "rows": 328,
+      "baseline": 0.5534,
+      "evaluation": {
+        "samples": 328,
+        "positives": 147,
+        "baselineProbability": 0.5534,
+        "brierScore": 0.209,
+        "baselineBrierScore": 0.2584,
+        "brierSkillScore": 0.1912,
+        "rocAuc": 0.753,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 79,
+          "falsePositives": 36,
+          "trueNegatives": 145,
+          "falseNegatives": 68
+        },
+        "precision": 0.687,
+        "recall": 0.5374,
+        "f1": 0.6031,
+        "accuracy": 0.6829,
+        "baselineComparison": {
+          "precision": 0.4482,
+          "recall": 1,
+          "f1": 0.6189,
+          "accuracy": 0.4482
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 25,
+            "meanPredicted": 0.1725,
+            "observedFrequency": 0.16
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 38,
+            "meanPredicted": 0.2492,
+            "observedFrequency": 0.2368
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 65,
+            "meanPredicted": 0.351,
+            "observedFrequency": 0.2308
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 85,
+            "meanPredicted": 0.4656,
+            "observedFrequency": 0.4706
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 87,
+            "meanPredicted": 0.526,
+            "observedFrequency": 0.5977
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 26,
+            "meanPredicted": 0.66,
+            "observedFrequency": 0.9615
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 2,
+            "meanPredicted": 0.7639,
+            "observedFrequency": 1
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Outperforms the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 328,
+        "positives": 147,
+        "baselineProbability": 0.5534,
+        "brierScore": 0.2092,
+        "baselineBrierScore": 0.2584,
+        "brierSkillScore": 0.1903,
+        "rocAuc": 0.753,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 112,
+          "falsePositives": 68,
+          "trueNegatives": 113,
+          "falseNegatives": 35
+        },
+        "precision": 0.6222,
+        "recall": 0.7619,
+        "f1": 0.685,
+        "accuracy": 0.686,
+        "baselineComparison": {
+          "precision": 0.4482,
+          "recall": 1,
+          "f1": 0.6189,
+          "accuracy": 0.4482
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 9,
+            "meanPredicted": 0.1765,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 43,
+            "meanPredicted": 0.2503,
+            "observedFrequency": 0.3023
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 46,
+            "meanPredicted": 0.3585,
+            "observedFrequency": 0.2174
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 50,
+            "meanPredicted": 0.4445,
+            "observedFrequency": 0.24
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 142,
+            "meanPredicted": 0.5458,
+            "observedFrequency": 0.5563
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 22,
+            "meanPredicted": 0.6544,
+            "observedFrequency": 0.8182
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 15,
+            "meanPredicted": 0.716,
+            "observedFrequency": 0.9333
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 1,
+            "meanPredicted": 0.8135,
+            "observedFrequency": 1
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Outperforms the climatological baseline on this validation split."
+      }
+    },
+    {
+      "region": "California & Nevada",
+      "rows": 327,
+      "baseline": 0.6334,
+      "evaluation": {
+        "samples": 327,
+        "positives": 158,
+        "baselineProbability": 0.6334,
+        "brierScore": 0.2526,
+        "baselineBrierScore": 0.2723,
+        "brierSkillScore": 0.0722,
+        "rocAuc": 0.5461,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 67,
+          "falsePositives": 62,
+          "trueNegatives": 107,
+          "falseNegatives": 91
+        },
+        "precision": 0.5194,
+        "recall": 0.4241,
+        "f1": 0.4669,
+        "accuracy": 0.5321,
+        "baselineComparison": {
+          "precision": 0.4832,
+          "recall": 1,
+          "f1": 0.6515,
+          "accuracy": 0.4832
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 1,
+            "meanPredicted": 0.1996,
+            "observedFrequency": 1
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 27,
+            "meanPredicted": 0.252,
+            "observedFrequency": 0.3704
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 67,
+            "meanPredicted": 0.3636,
+            "observedFrequency": 0.4179
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 103,
+            "meanPredicted": 0.444,
+            "observedFrequency": 0.5049
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 106,
+            "meanPredicted": 0.5464,
+            "observedFrequency": 0.5283
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 23,
+            "meanPredicted": 0.6241,
+            "observedFrequency": 0.4783
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      },
+      "calibratedEvaluation": {
+        "samples": 327,
+        "positives": 158,
+        "baselineProbability": 0.6334,
+        "brierScore": 0.2611,
+        "baselineBrierScore": 0.2723,
+        "brierSkillScore": 0.0409,
+        "rocAuc": 0.5461,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 133,
+          "falsePositives": 124,
+          "trueNegatives": 45,
+          "falseNegatives": 25
+        },
+        "precision": 0.5175,
+        "recall": 0.8418,
+        "f1": 0.641,
+        "accuracy": 0.5443,
+        "baselineComparison": {
+          "precision": 0.4832,
+          "recall": 1,
+          "f1": 0.6515,
+          "accuracy": 0.4832
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1,
+            "meanPredicted": 0.295,
+            "observedFrequency": 1
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 25,
+            "meanPredicted": 0.3574,
+            "observedFrequency": 0.36
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 44,
+            "meanPredicted": 0.4707,
+            "observedFrequency": 0.3409
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 103,
+            "meanPredicted": 0.5484,
+            "observedFrequency": 0.4757
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 111,
+            "meanPredicted": 0.6494,
+            "observedFrequency": 0.5586
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 43,
+            "meanPredicted": 0.7222,
+            "observedFrequency": 0.5116
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      }
+    },
+    {
+      "region": "Chile",
+      "rows": 329,
+      "baseline": 0.3864,
+      "evaluation": {
+        "samples": 329,
+        "positives": 98,
+        "baselineProbability": 0.3864,
+        "brierScore": 0.2096,
+        "baselineBrierScore": 0.217,
+        "brierSkillScore": 0.0342,
+        "rocAuc": 0.5708,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 2,
+          "trueNegatives": 229,
+          "falseNegatives": 98
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0.696,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 0.7021
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 6,
+            "meanPredicted": 0.0556,
+            "observedFrequency": 0.5
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 26,
+            "meanPredicted": 0.1666,
+            "observedFrequency": 0.0385
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 93,
+            "meanPredicted": 0.2602,
+            "observedFrequency": 0.2581
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 168,
+            "meanPredicted": 0.35,
+            "observedFrequency": 0.3631
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 34,
+            "meanPredicted": 0.441,
+            "observedFrequency": 0.2647
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 2,
+            "meanPredicted": 0.504,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Outperforms the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 329,
+        "positives": 98,
+        "baselineProbability": 0.3864,
+        "brierScore": 0.214,
+        "baselineBrierScore": 0.217,
+        "brierSkillScore": 0.0139,
+        "rocAuc": 0.5708,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "trueNegatives": 231,
+          "falseNegatives": 98
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0.7021,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 0.7021
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 10,
+            "meanPredicted": 0.0597,
+            "observedFrequency": 0.3
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 99,
+            "meanPredicted": 0.1583,
+            "observedFrequency": 0.1818
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 187,
+            "meanPredicted": 0.245,
+            "observedFrequency": 0.369
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 33,
+            "meanPredicted": 0.3321,
+            "observedFrequency": 0.2424
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      }
+    },
+    {
+      "region": "Indonesia",
+      "rows": 329,
+      "baseline": 0.8389,
+      "evaluation": {
+        "samples": 329,
+        "positives": 297,
+        "baselineProbability": 0.8389,
+        "brierScore": 0.0878,
+        "baselineBrierScore": 0.0919,
+        "brierSkillScore": 0.044,
+        "rocAuc": 0.6188,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 297,
+          "falsePositives": 32,
+          "trueNegatives": 0,
+          "falseNegatives": 0
+        },
+        "precision": 0.9027,
+        "recall": 1,
+        "f1": 0.9489,
+        "accuracy": 0.9027,
+        "baselineComparison": {
+          "precision": 0.9027,
+          "recall": 1,
+          "f1": 0.9489,
+          "accuracy": 0.9027
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 2,
+            "meanPredicted": 0.7567,
+            "observedFrequency": 0.5
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 58,
+            "meanPredicted": 0.8773,
+            "observedFrequency": 0.8793
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 269,
+            "meanPredicted": 0.9575,
+            "observedFrequency": 0.9108
+          }
+        ],
+        "verdict": "Outperforms the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 329,
+        "positives": 297,
+        "baselineProbability": 0.8389,
+        "brierScore": 0.0944,
+        "baselineBrierScore": 0.0919,
+        "brierSkillScore": -0.0271,
+        "rocAuc": 0.6188,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 297,
+          "falsePositives": 32,
+          "trueNegatives": 0,
+          "falseNegatives": 0
+        },
+        "precision": 0.9027,
+        "recall": 1,
+        "f1": 0.9489,
+        "accuracy": 0.9027,
+        "baselineComparison": {
+          "precision": 0.9027,
+          "recall": 1,
+          "f1": 0.9489,
+          "accuracy": 0.9027
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 329,
+            "meanPredicted": 0.9877,
+            "observedFrequency": 0.9027
+          }
+        ],
+        "verdict": "Does NOT outperform the climatological baseline on this validation split."
+      }
+    },
+    {
+      "region": "Alaska",
+      "rows": 329,
+      "baseline": 0.9899,
+      "evaluation": {
+        "samples": 329,
+        "positives": 329,
+        "baselineProbability": 0.9899,
+        "brierScore": 0.0003,
+        "baselineBrierScore": 0.0001,
+        "brierSkillScore": -1.9241,
+        "rocAuc": null,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 329,
+          "falsePositives": 0,
+          "trueNegatives": 0,
+          "falseNegatives": 0
+        },
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "accuracy": 1,
+        "baselineComparison": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "accuracy": 1
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 329,
+            "meanPredicted": 0.9857,
+            "observedFrequency": 1
+          }
+        ],
+        "verdict": "Does NOT outperform the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 329,
+        "positives": 329,
+        "baselineProbability": 0.9899,
+        "brierScore": 0,
+        "baselineBrierScore": 0.0001,
+        "brierSkillScore": 0.9997,
+        "rocAuc": null,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 329,
+          "falsePositives": 0,
+          "trueNegatives": 0,
+          "falseNegatives": 0
+        },
+        "precision": 1,
+        "recall": 1,
+        "f1": 1,
+        "accuracy": 1,
+        "baselineComparison": {
+          "precision": 1,
+          "recall": 1,
+          "f1": 1,
+          "accuracy": 1
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 329,
+            "meanPredicted": 0.9998,
+            "observedFrequency": 1
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      }
+    },
+    {
+      "region": "Greece & western Türkiye",
+      "rows": 328,
+      "baseline": 0.1065,
+      "evaluation": {
+        "samples": 328,
+        "positives": 3,
+        "baselineProbability": 0.1065,
+        "brierScore": 0.0242,
+        "baselineBrierScore": 0.0185,
+        "brierSkillScore": -0.3075,
+        "rocAuc": 0.0021,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "trueNegatives": 325,
+          "falseNegatives": 3
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0.9909,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 0.9909
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 137,
+            "meanPredicted": 0.0779,
+            "observedFrequency": 0.0219
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 179,
+            "meanPredicted": 0.1416,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 12,
+            "meanPredicted": 0.2095,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Does NOT outperform the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 328,
+        "positives": 3,
+        "baselineProbability": 0.1065,
+        "brierScore": 0.0093,
+        "baselineBrierScore": 0.0185,
+        "brierSkillScore": 0.4958,
+        "rocAuc": 0.0021,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "trueNegatives": 325,
+          "falseNegatives": 3
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 0.9909,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 0.9909
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 328,
+            "meanPredicted": 0.0155,
+            "observedFrequency": 0.0091
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      }
+    },
+    {
+      "region": "Iceland",
+      "rows": 231,
+      "baseline": 0.0044,
+      "evaluation": {
+        "samples": 231,
+        "positives": 0,
+        "baselineProbability": 0.0044,
+        "brierScore": 0.0009,
+        "baselineBrierScore": 0,
+        "brierSkillScore": -44.6651,
+        "rocAuc": null,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "trueNegatives": 231,
+          "falseNegatives": 0
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 1,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 1
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 231,
+            "meanPredicted": 0.0255,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Does NOT outperform the climatological baseline on this validation split."
+      },
+      "calibratedEvaluation": {
+        "samples": 231,
+        "positives": 0,
+        "baselineProbability": 0.0044,
+        "brierScore": 0,
+        "baselineBrierScore": 0,
+        "brierSkillScore": 0.9991,
+        "rocAuc": null,
+        "threshold": 0.5,
+        "confusionMatrix": {
+          "truePositives": 0,
+          "falsePositives": 0,
+          "trueNegatives": 231,
+          "falseNegatives": 0
+        },
+        "precision": 0,
+        "recall": 0,
+        "f1": 0,
+        "accuracy": 1,
+        "baselineComparison": {
+          "precision": 0,
+          "recall": 0,
+          "f1": 0,
+          "accuracy": 1
+        },
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 231,
+            "meanPredicted": 0.0001,
+            "observedFrequency": 0
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 0,
+            "meanPredicted": null,
+            "observedFrequency": null
+          }
+        ],
+        "verdict": "Marginally better than the climatological baseline; treat as weak."
+      }
+    }
+  ]
+}

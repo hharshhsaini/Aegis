@@ -7,9 +7,11 @@ import { localProviderPlugins } from '../../server/providers/local.js';
 import { apiNotFoundPlugin } from '../../server/standalone/api-not-found.js';
 import { makeFixtureRoot } from './fixtureRoot.mjs';
 
-test('data providers have both hooks; credential editing stays development-only', () => {
+test('data providers have both hooks; provider status stays development-only', () => {
   for (const plugin of localProviderPlugins()) {
-    if (plugin.name === 'gev-key-setup') {
+    // Provider status is a dev-server affordance: a built preview has no
+    // reason to answer which credentials a developer has configured.
+    if (plugin.name === 'aegis-provider-status') {
       assert.equal(plugin.configurePreviewServer, undefined);
       assert.equal(
         plugin.apply({}, { command: 'serve', isPreview: true }),

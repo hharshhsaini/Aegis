@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 
-test('panel presentation places Transit between Street Traffic and Bike Share in Movement', () => {
+test('panel presentation lists only the layers Aegis still registers', () => {
   const source = readFileSync(
     new URL('./layerPanel.js', import.meta.url),
     'utf8',
@@ -17,17 +17,35 @@ test('panel presentation places Transit between Street Traffic and Bike Share in
   );
   assert.deepEqual(
     order.filter(({ label }) => label === 'Movement').map(({ id }) => id),
+    ['satellites', 'flights'],
+  );
+  assert.deepEqual(
+    order.map(({ id }) => id),
     [
       'satellites',
       'flights',
-      'military',
-      'ais-live-vessels',
-      'traffic',
-      'transit',
-      'bikeshare',
+      'telegeography-submarine-cables',
+      'local-dams',
+      'rocket-launches',
+      'earthquakes',
+      'local-firms',
     ],
   );
-  assert.equal(order.filter(({ id }) => id === 'transit').length, 1);
+  // Retired layers have no panel position at all.
+  for (const id of [
+    'military',
+    'ais-live-vessels',
+    'traffic',
+    'transit',
+    'bikeshare',
+    'cctv',
+    'alpr-cameras',
+    'military-installations',
+    'local-datacenters',
+    'directions',
+    'radio',
+  ])
+    assert.equal(order.filter((entry) => entry.id === id).length, 0, id);
 });
 
 test('partial feed controls distinguish incomplete records from stale data and outages', async () => {

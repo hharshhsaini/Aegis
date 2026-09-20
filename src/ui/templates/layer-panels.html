@@ -1,4 +1,4 @@
-  <div id="left-panel-stack">
+<div id="left-panel-stack">
   <!-- Data Layer Toggle Panel -->
   <div id="data-panel" class="panel-collapsible collapsed active" data-panel-id="data-panel">
     <div class="panel-glow"></div>
@@ -6,7 +6,13 @@
       <div class="panel-header">
         <span class="panel-title">DATA LAYERS</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="data-panel" title="Collapse panel">+</button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="data-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
       </div>
       <div id="data-toggles" class="data-toggle-list"></div>
     </div>
@@ -19,12 +25,20 @@
       <div class="panel-header">
         <span class="panel-title">CCTV</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="cctv-panel" title="Collapse panel">+</button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="cctv-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
       </div>
       <div id="cctv-frame-wrap" class="cctv-frame-wrap">
         <img id="cctv-frame" alt="CCTV feed frame" />
       </div>
-      <div id="cctv-source-badge" role="status" aria-live="polite">SOURCE · UNKNOWN</div>
+      <div id="cctv-source-badge" role="status" aria-live="polite">
+        SOURCE · UNKNOWN
+      </div>
       <div id="cctv-meta">Enable CCTV to load camera intersections</div>
       <div class="cctv-controls">
         <button id="cctv-enable-btn" class="scene-btn">CCTV OFF</button>
@@ -41,22 +55,72 @@
         <button id="cctv-auto-hop-btn" class="scene-btn">AUTO HOP OFF</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-projection-btn" class="scene-btn">PROJECTION ON</button>
+        <button id="cctv-projection-btn" class="scene-btn">
+          PROJECTION ON
+        </button>
         <span id="cctv-quality-chip">CAL · --</span>
       </div>
       <div class="cctv-calibration-block">
         <div class="cctv-calibration-header">
           <div class="cctv-summary-label">CALIBRATION</div>
-          <button id="cctv-adjust-btn" class="scene-btn" title="Drag the camera in the world: rings rotate, arrows move, handles set range/FOV">ADJUST</button>
+          <button
+            id="cctv-adjust-btn"
+            class="scene-btn"
+            title="Drag the camera in the world: rings rotate, arrows move, handles set range/FOV"
+          >
+            ADJUST
+          </button>
         </div>
         <div id="cctv-cal-readout" class="cctv-cal-readout" aria-label="Camera pose — click a value to type">
-          <button class="cctv-cal-value" data-cal-field="heading" title="Heading (compass °) — click to type">HDG --</button>
-          <button class="cctv-cal-value" data-cal-field="pitch" title="Pitch (° up/down) — click to type">PITCH --</button>
-          <button class="cctv-cal-value" data-cal-field="fov" title="Horizontal FOV (°) — click to type">FOV --</button>
-          <button class="cctv-cal-value" data-cal-field="range" title="Range / monitor-plane distance (m) — click to type">RANGE --</button>
-          <button class="cctv-cal-value" data-cal-field="height" title="Mount height above ground (m) — click to type">HGT --</button>
-          <button class="cctv-cal-value" data-cal-field="north" title="North offset from catalog position (m) — click to type">ΔN --</button>
-          <button class="cctv-cal-value" data-cal-field="east" title="East offset from catalog position (m) — click to type">ΔE --</button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="heading"
+            title="Heading (compass °) — click to type"
+          >
+            HDG --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="pitch"
+            title="Pitch (° up/down) — click to type"
+          >
+            PITCH --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="fov"
+            title="Horizontal FOV (°) — click to type"
+          >
+            FOV --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="range"
+            title="Range / monitor-plane distance (m) — click to type"
+          >
+            RANGE --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="height"
+            title="Mount height above ground (m) — click to type"
+          >
+            HGT --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="north"
+            title="North offset from catalog position (m) — click to type"
+          >
+            ΔN --
+          </button>
+          <button
+            class="cctv-cal-value"
+            data-cal-field="east"
+            title="East offset from catalog position (m) — click to type"
+          >
+            ΔE --
+          </button>
         </div>
         <div class="cctv-controls cctv-calibration-actions">
           <button id="cctv-calib-save-btn" class="scene-btn">SAVE CAL</button>
@@ -64,7 +128,9 @@
         </div>
       </div>
       <div class="cctv-summary-label">SCENE SUMMARY</div>
-      <div id="cctv-summary">Enable CCTV to start camera-linked intelligence summaries.</div>
+      <div id="cctv-summary">
+        Enable CCTV to start camera-linked intelligence summaries.
+      </div>
     </div>
   </div>
 
@@ -75,28 +141,45 @@
       <div class="panel-header">
         <span class="panel-title">SCENES</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="scene-panel" title="Collapse panel">+</button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="scene-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
       </div>
       <div class="scene-controls">
         <select id="scene-select" aria-label="Scene recipe"></select>
         <button id="scene-new-btn" class="scene-btn">NEW</button>
-        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">DEL</button>
+        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">
+          DEL
+        </button>
       </div>
       <div class="scene-controls">
         <button id="scene-capture-btn" class="scene-btn">CAPTURE SHOT</button>
-        <button id="scene-update-shot-btn" class="scene-btn">UPDATE SHOT</button>
+        <button id="scene-update-shot-btn" class="scene-btn">
+          UPDATE SHOT
+        </button>
       </div>
       <div id="scene-shot-list" class="scene-shot-list"></div>
       <div class="scene-controls">
         <button id="scene-start-btn" class="scene-btn">START</button>
-        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">STOP</button>
+        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">
+          STOP
+        </button>
         <button id="scene-next-btn" class="scene-btn">NEXT</button>
       </div>
       <div class="scene-controls">
         <button id="scene-export-btn" class="scene-btn">EXPORT PRESETS</button>
         <button id="scene-import-btn" class="scene-btn">IMPORT</button>
         <button id="scene-download-btn" class="scene-btn">RUN LOG</button>
-        <input type="file" id="scene-import-file" accept="application/json,.json" hidden />
+        <input
+          type="file"
+          id="scene-import-file"
+          accept="application/json,.json"
+          hidden
+        />
       </div>
       <div class="scene-progress">
         <div id="scene-progress-fill">0%</div>
@@ -105,4 +188,561 @@
     </div>
   </div>
 
+  <!-- Aegis Intelligence: the analysis, not the weather variables behind it. -->
+  <!-- Location consent. Shown once; the browser owns the actual permission
+       dialog and this never tries to pre-empt or work around it. -->
+  <section id="location-consent" class="aegis-consent" hidden aria-labelledby="location-consent-title">
+    <h2 id="location-consent-title" class="aegis-consent-title">AEGIS LOCATION ACCESS</h2>
+    <p class="aegis-consent-lead">Enable location intelligence?</p>
+    <p class="aegis-consent-body">Aegis uses your approximate location to:</p>
+    <ul class="aegis-consent-list">
+      <li>centre the globe around you</li>
+      <li>identify nearby disasters</li>
+      <li>prioritise local incidents over distant ones</li>
+      <li>decide which developments are worth announcing</li>
+    </ul>
+    <p class="aegis-consent-privacy">
+      Your position is rounded to about a kilometre before anything else in
+      Aegis sees it, and it is never written to a link, a log, or a file.
+    </p>
+    <div class="aegis-consent-actions">
+      <button id="location-consent-enable" class="scene-btn scene-btn-primary" type="button">ENABLE LOCATION</button>
+      <button id="location-consent-decline" class="scene-btn" type="button">CONTINUE WITHOUT LOCATION</button>
+    </div>
+  </section>
+
+  <!-- Local Intelligence: the monitored location, its hazard picture and what
+       is near it. Distinct from Regional Intelligence, which follows the
+       camera. -->
+  <section id="local-panel" class="panel-collapsible aegis-local" data-panel-id="local-panel" aria-label="Aegis local intelligence">
+    <div class="panel-glow"></div>
+    <div class="aegis-local-inner">
+      <div class="panel-header">
+        <span class="panel-title">LOCAL INTELLIGENCE</span>
+        <span id="local-status-chip" class="aegis-feed-chip" data-tone="idle">MONITORING</span>
+        <span class="panel-divider"></span>
+        <button class="panel-collapse-btn" data-collapse-target="local-panel" title="Collapse panel">+</button>
+      </div>
+      <p class="aegis-panel-summary" data-role="collapsed-summary" hidden></p>
+
+      <div class="aegis-local-body">
+        <div class="aegis-local-place">
+          <h3 id="local-place" class="aegis-local-name">LOCATION NOT ENABLED</h3>
+          <p id="local-place-detail" class="aegis-local-detail"></p>
+          <p id="local-monitoring" class="aegis-local-monitoring"></p>
+          <button id="monitor-area-btn" class="aegis-local-monitor-btn" type="button" hidden>MONITOR THIS AREA</button>
+        </div>
+
+        <div id="local-not-enabled" class="aegis-local-cta">
+          <button id="local-enable-btn" class="aegis-panel-action" type="button">ENABLE LOCATION</button>
+        </div>
+
+        <dl id="local-counts" class="aegis-metric-grid"></dl>
+
+        <!-- AEGIS LIVE. This replaced a static "NEAREST INCIDENTS" dump and the
+             two buttons that asked the user to request an update. Output only:
+             there is no input here, and adding one would turn a monitoring
+             console back into a chatbot. -->
+        <div class="aegis-live">
+          <div class="aegis-live-header">
+            <h4 class="aegis-regional-heading">AEGIS LIVE</h4>
+            <span id="aegis-live-state" class="aegis-live-chip" data-state="MONITORING">AEGIS MONITORING</span>
+          </div>
+
+          <div id="aegis-live-scroll" class="aegis-live-scroll">
+            <ul id="aegis-live-list" class="aegis-live-list" role="log" aria-live="polite" aria-label="Aegis live intelligence"></ul>
+          </div>
+
+          <!-- Shown only when the reader has scrolled away from the newest
+               message, so arrivals never yank them out of the history they
+               are reading. -->
+          <button id="aegis-live-jump" class="aegis-live-jump" type="button" hidden>&darr; NEW INTELLIGENCE</button>
+
+          <div class="aegis-live-controls">
+            <button id="voice-alerts-toggle" class="aegis-live-mute" type="button" aria-pressed="true">
+              <span class="aegis-live-mute-icon" aria-hidden="true">&#9679;</span>
+              <span id="voice-alerts-label">VOICE ON</span>
+            </button>
+            <select id="voice-alert-level" class="aegis-local-select" aria-label="Alert level">
+              <option value="ALL">ALL</option>
+              <option value="IMPORTANT" selected>IMPORTANT</option>
+              <option value="WARNING+">WARNING+</option>
+              <option value="URGENT ONLY">URGENT ONLY</option>
+            </select>
+          </div>
+          <p id="official-alerts-status" class="aegis-local-official"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regional Intelligence: what is true of the place the camera is looking
+       at. It combines what the other engines have already scored rather than
+       running a model of its own, so it cannot disagree with the panels it
+       summarises. -->
+  <section id="regional-panel" class="panel-collapsible aegis-regional" data-panel-id="regional-panel" aria-label="Aegis regional intelligence">
+    <div class="panel-glow"></div>
+    <div class="aegis-regional-inner">
+      <div class="panel-header">
+        <span class="panel-title">REGIONAL INTELLIGENCE</span>
+        <span class="panel-divider"></span>
+        <button class="panel-collapse-btn" data-collapse-target="regional-panel" title="Collapse panel">+</button>
+      </div>
+
+      <div class="aegis-regional-body" role="status" aria-live="polite">
+        <div class="aegis-regional-place">
+          <h3 id="regional-place" class="aegis-regional-name">LOCATING&hellip;</h3>
+          <p id="regional-place-detail" class="aegis-regional-detail"></p>
+          <p id="regional-coordinates" class="aegis-regional-coords"></p>
+          <p id="regional-status" class="aegis-regional-status" data-tone="idle"></p>
+        </div>
+
+        <div class="aegis-regional-section">
+          <h4 class="aegis-regional-heading">HAZARD SNAPSHOT</h4>
+          <ul id="regional-snapshot" class="aegis-regional-snapshot"></ul>
+        </div>
+
+        <div class="aegis-regional-section">
+          <h4 class="aegis-regional-heading">OUTLOOK</h4>
+          <ul id="regional-outlook" class="aegis-regional-outlook"></ul>
+        </div>
+
+        <div class="aegis-regional-section">
+          <h4 class="aegis-regional-heading">CONTEXT</h4>
+          <dl id="regional-conditions" class="aegis-regional-conditions"></dl>
+          <p class="aegis-regional-incidents-line">
+            <span class="aegis-regional-incidents-label">ACTIVE INCIDENTS</span>
+            <span id="regional-incidents" class="aegis-regional-incidents">0</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="intelligence-panel" class="panel-collapsible aegis-intel" data-panel-id="intelligence-panel" aria-label="Aegis weather intelligence">
+    <div class="panel-glow"></div>
+    <div class="aegis-intel-inner">
+      <div class="panel-header">
+        <span class="panel-title">AEGIS INTELLIGENCE</span>
+        <span
+          id="intel-feed-chip"
+          class="aegis-feed-chip"
+          data-tone="idle"
+          title="Open-Meteo feed"
+          >SYNCING</span
+        >
+        <span class="panel-divider"></span>
+        <button
+          id="intel-refresh-btn"
+          class="aegis-intel-refresh"
+          type="button"
+          title="Re-analyze this location"
+          aria-label="Re-analyze this location"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >radar</span
+          >
+        </button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="intelligence-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
+      </div>
+
+      <div id="intel-body" class="aegis-intel-body" role="status" aria-live="polite">
+        <p id="intel-placeholder" class="aegis-intel-placeholder">
+          Select a location on the globe to analyze disaster risk conditions.
+        </p>
+
+        <div id="intel-content" class="aegis-intel-content" hidden>
+          <!-- Regional state, so a score is never read without its place. -->
+          <p id="intel-region" class="aegis-intel-region"></p>
+
+          <!-- Headline: the one thing an operator should read first. -->
+          <div id="intel-headline" class="aegis-intel-headline">
+            <div class="aegis-intel-headline-row">
+              <span id="intel-headline-dot" class="aegis-risk-dot"></span>
+              <span id="intel-headline-label" class="aegis-intel-headline-label"
+                >—</span
+              >
+              <span id="intel-headline-level" class="aegis-intel-headline-level"
+                >—</span
+              >
+            </div>
+            <div class="aegis-intel-score-row">
+              <span id="intel-headline-score" class="aegis-intel-score">—</span>
+              <span class="aegis-intel-score-scale">/ 100</span>
+              <span id="intel-headline-trend" class="aegis-intel-trend"></span>
+            </div>
+            <p id="intel-headline-summary" class="aegis-intel-summary"></p>
+          </div>
+
+          <!-- Risk modules: score, status, trend, one line of why. The forty
+               variables behind them live in RAW OBSERVATIONS at the bottom. -->
+          <div class="aegis-intel-section">
+            <h3 class="aegis-intel-heading">RISK</h3>
+            <ul id="intel-risks" class="aegis-intel-risks"></ul>
+          </div>
+
+          <div class="aegis-intel-section">
+            <h3 class="aegis-intel-heading">ANALYSIS</h3>
+            <ul id="intel-drivers" class="aegis-intel-drivers"></ul>
+          </div>
+
+          <div class="aegis-intel-section">
+            <h3 class="aegis-intel-heading">OUTLOOK</h3>
+            <ul id="intel-forecast" class="aegis-intel-forecast"></ul>
+            <p id="intel-forecast-note" class="aegis-intel-note"></p>
+          </div>
+
+          <div class="aegis-intel-section">
+            <h3 class="aegis-intel-heading">ACTION</h3>
+            <ul id="intel-actions" class="aegis-intel-actions"></ul>
+          </div>
+
+          <div id="intel-changes-section" class="aegis-intel-section" hidden>
+            <h3 class="aegis-intel-heading">SIGNIFICANT CHANGES</h3>
+            <ul id="intel-changes" class="aegis-intel-changes"></ul>
+          </div>
+
+          <details class="aegis-intel-raw">
+            <summary>RAW OBSERVATIONS</summary>
+            <dl id="intel-conditions" class="aegis-intel-conditions"></dl>
+          </details>
+
+          <div class="aegis-intel-footer">
+            <span id="intel-location" class="aegis-intel-location"></span>
+            <span id="intel-updated" class="aegis-intel-updated"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- The right-hand intelligence rail.
+     Fire and earthquake were each anchored to the viewport independently —
+     one from the top, one from the bottom — with nothing coordinating them, so
+     at common window heights they simply drew over each other. Stacking them in
+     one flex column means the layout, rather than two guesses, decides where
+     each one sits. -->
+<div id="right-intel-rail">
+  <!-- Aegis Fire Intelligence: NASA FIRMS detections correlated with weather. -->
+  <section id="fire-panel" class="panel-collapsible aegis-fire collapsed" data-panel-id="fire-panel" aria-label="Aegis fire intelligence">
+    <div class="panel-glow"></div>
+    <div class="aegis-fire-inner">
+      <div class="panel-header">
+        <span class="panel-title">FIRE INTELLIGENCE</span>
+        <span
+          id="fire-feed-chip"
+          class="aegis-feed-chip"
+          data-tone="idle"
+          title="NASA FIRMS feed"
+          >SYNCING</span
+        >
+        <span class="panel-divider"></span>
+        <button
+          id="fire-refresh-btn"
+          class="aegis-fire-refresh"
+          type="button"
+          title="Re-observe this area"
+          aria-label="Re-observe this area"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >local_fire_department</span
+          >
+        </button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="fire-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
+      </div>
+
+      <!-- Shown only while collapsed: a panel worth collapsing is usually one
+           an operator still wants a number from. -->
+      <p class="aegis-panel-summary" data-role="collapsed-summary" hidden></p>
+
+      <div class="aegis-fire-body" role="status" aria-live="polite">
+        <!-- Feed health, in the operator's vocabulary. The transport error, if
+             there is one, lives inside this block's diagnostics disclosure. -->
+        <div
+          id="fire-feed-state"
+          class="aegis-feed-state"
+          data-tone="idle"
+          hidden
+        ></div>
+        <p id="fire-status" class="aegis-fire-status">
+          Scanning for satellite fire detections in view.
+        </p>
+
+        <!-- Area metrics. Always present so the panel says something useful
+             before a cluster is selected; each figure is a count or a maximum
+             over the detections FIRMS actually returned. -->
+        <dl id="fire-metrics" class="aegis-metric-grid"></dl>
+        <div id="fire-area-conditions" class="aegis-metric-strip"></div>
+
+        <div id="fire-content" class="aegis-fire-content" hidden>
+          <h3 id="fire-heading" class="aegis-fire-heading">
+            ACTIVE FIRE CLUSTER
+          </h3>
+          <p id="fire-summary" class="aegis-fire-summary"></p>
+
+          <div id="fire-stats" class="aegis-fire-grid"></div>
+
+          <div class="aegis-fire-section">
+            <h4 class="aegis-fire-label">FIRE ACTIVITY</h4>
+            <div id="fire-activity" class="aegis-fire-activity">
+              INSUFFICIENT DATA
+            </div>
+            <p id="fire-activity-note" class="aegis-fire-note"></p>
+          </div>
+
+          <div class="aegis-fire-section">
+            <h4 class="aegis-fire-label">ENVIRONMENTAL CONDITIONS</h4>
+            <div id="fire-conditions" class="aegis-fire-grid"></div>
+          </div>
+
+          <div class="aegis-fire-section">
+            <h4 class="aegis-fire-label">FIRE SPREAD CONDITIONS</h4>
+            <div class="aegis-fire-spread-row">
+              <span id="fire-spread" class="aegis-fire-spread-level">—</span>
+              <span id="fire-spread-score" class="aegis-fire-spread-score"
+                >—</span
+              >
+            </div>
+            <ul id="fire-drivers" class="aegis-fire-drivers"></ul>
+          </div>
+
+          <div class="aegis-fire-section">
+            <h4 class="aegis-fire-label">POTENTIAL ENVIRONMENTAL DIRECTION</h4>
+            <div id="fire-direction" class="aegis-fire-direction">—</div>
+            <p id="fire-direction-note" class="aegis-fire-note"></p>
+          </div>
+
+          <details class="aegis-fire-details">
+            <summary>Technical detail</summary>
+            <div id="fire-technical" class="aegis-fire-grid"></div>
+          </details>
+        </div>
+
+        <div class="aegis-panel-footer">
+          <button
+            id="fire-view-clusters"
+            class="aegis-panel-action"
+            type="button"
+          >
+            VIEW ACTIVE CLUSTERS
+          </button>
+          <p id="fire-attribution" class="aegis-fire-attribution">
+            <span class="aegis-panel-source-label">SOURCE</span>
+            NASA FIRMS &middot; VIIRS near real-time. Satellite thermal
+            anomalies, not confirmed ground truth.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aegis Earthquake Intelligence: USGS observations, organized. -->
+  <section id="quake-panel" class="panel-collapsible aegis-quake collapsed" data-panel-id="quake-panel" aria-label="Aegis earthquake intelligence">
+    <div class="panel-glow"></div>
+    <div class="aegis-quake-inner">
+      <div class="panel-header">
+        <span class="panel-title">EARTHQUAKE INTELLIGENCE</span>
+        <span
+          id="quake-feed-chip"
+          class="aegis-feed-chip"
+          data-tone="idle"
+          title="USGS feed"
+          >SYNCING</span
+        >
+        <span class="panel-divider"></span>
+        <button
+          id="quake-refresh-btn"
+          class="aegis-quake-refresh"
+          type="button"
+          title="Refresh USGS observations"
+          aria-label="Refresh USGS observations"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true"
+            >radar</span
+          >
+        </button>
+        <button
+          class="panel-collapse-btn"
+          data-collapse-target="quake-panel"
+          title="Collapse panel"
+        >
+          +
+        </button>
+      </div>
+
+      <p class="aegis-panel-summary" data-role="collapsed-summary" hidden></p>
+
+    <div class="aegis-quake-body" role="status" aria-live="polite">
+        <!-- Feed health; the transport error lives in this block's disclosure. -->
+        <div
+          id="quake-feed-state"
+          class="aegis-feed-state"
+          data-tone="idle"
+          hidden
+        ></div>
+        <p id="quake-status" class="aegis-quake-status">
+          Loading recent USGS earthquake observations.
+        </p>
+
+        <!-- Area metrics, from the USGS records in view. -->
+        <dl id="quake-metrics" class="aegis-metric-grid"></dl>
+
+        <!-- AI seismic forecast. Always shows the target beside the number. -->
+        <div id="quake-forecast" class="aegis-quake-forecast" hidden>
+          <h4 class="aegis-quake-label">SEISMIC ACTIVITY FORECAST</h4>
+          <div class="aegis-quake-forecast-head">
+            <span
+              id="quake-forecast-probability"
+              class="aegis-quake-probability"
+              >—</span
+            >
+            <span class="aegis-quake-forecast-of">probability of</span>
+          </div>
+          <div id="quake-forecast-target" class="aegis-quake-target">—</div>
+          <div class="aegis-quake-grid">
+            <div class="aegis-quake-row">
+              <span class="aegis-quake-key">Region baseline</span>
+              <span id="quake-forecast-baseline" class="aegis-quake-value"
+                >—</span
+              >
+            </div>
+            <div class="aegis-quake-row">
+              <span class="aegis-quake-key">Observed (24h)</span>
+              <span id="quake-forecast-observed" class="aegis-quake-value"
+                >—</span
+              >
+            </div>
+            <div class="aegis-quake-row">
+              <span class="aegis-quake-key">Activity anomaly</span>
+              <span id="quake-forecast-anomaly" class="aegis-quake-value"
+                >—</span
+              >
+            </div>
+            <div class="aegis-quake-row">
+              <span class="aegis-quake-key">Direction</span>
+              <span id="quake-forecast-trend" class="aegis-quake-value">—</span>
+            </div>
+          </div>
+          <h4 class="aegis-quake-label aegis-quake-why">WHY</h4>
+          <ul id="quake-forecast-drivers" class="aegis-quake-drivers"></ul>
+          <p id="quake-forecast-summary" class="aegis-quake-summary"></p>
+          <p id="quake-forecast-model" class="aegis-quake-model"></p>
+        </div>
+
+        <div id="quake-content" class="aegis-quake-content" hidden>
+          <div class="aegis-quake-headline">
+            <span id="quake-magnitude" class="aegis-quake-magnitude">M—</span>
+            <span
+              id="quake-magnitude-category"
+              class="aegis-quake-category"
+            ></span>
+            <span id="quake-alert" class="aegis-quake-alert">INFORMATION</span>
+          </div>
+          <h3 id="quake-heading" class="aegis-quake-heading"></h3>
+
+          <div id="quake-facts" class="aegis-quake-grid"></div>
+          <p id="quake-depth-note" class="aegis-quake-note"></p>
+          <p id="quake-felt-note" class="aegis-quake-note"></p>
+
+          <div class="aegis-quake-section">
+            <h4 class="aegis-quake-label">SEQUENCE</h4>
+            <div id="quake-sequence" class="aegis-quake-strong">
+              No sequence detected
+            </div>
+            <p id="quake-sequence-note" class="aegis-quake-note"></p>
+          </div>
+
+          <div class="aegis-quake-section">
+            <h4 class="aegis-quake-label">ACTIVITY</h4>
+            <div id="quake-activity" class="aegis-quake-strong">
+              INSUFFICIENT DATA
+            </div>
+            <p id="quake-activity-note" class="aegis-quake-note"></p>
+          </div>
+
+          <div class="aegis-quake-section">
+            <h4 class="aegis-quake-label">GEOGRAPHIC ANALYSIS RADIUS (KM)</h4>
+            <div
+              id="quake-radius"
+              class="aegis-quake-radii"
+              role="group"
+              aria-label="Geographic analysis radius"
+            ></div>
+            <p id="quake-exposure" class="aegis-quake-note"></p>
+          </div>
+
+          <p
+            id="quake-weather"
+            class="aegis-quake-note aegis-quake-response"
+          ></p>
+
+          <a
+            id="quake-usgs-link"
+            class="aegis-quake-link"
+            href="https://earthquake.usgs.gov/earthquakes/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open the USGS event page</a
+          >
+        </div>
+
+        <p class="aegis-quake-attribution">
+          Earthquake observations from the USGS Earthquake Hazards Program.
+          Magnitude, depth, felt reports, significance and the tsunami flag are
+          USGS values. Aegis does not predict earthquakes.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Incidents board.
+     Every incident the console knows about, in one list: live detections from
+     USGS, NASA FIRMS and Open-Meteo, plus the authored Nepal flood sequence.
+     Nepal is one entry here rather than the whole feature — a demonstration
+     beside real detections, never standing in for them.
+
+     It lives along the bottom rather than in the left rail because the rail
+     budgets its height and collapses its lower panels when the analysis panels
+     fill up, which hid the launcher completely once a location was analyzed. -->
+<section id="incidents-bar" data-running="false" data-mode="LIVE" aria-label="Incidents">
+  <div class="incidents-board">
+    <div class="incidents-head">
+      <span class="incidents-eyebrow">INCIDENTS</span>
+      <span id="incidents-count" class="incidents-count">0</span>
+    </div>
+    <ul id="incidents-list" class="incidents-list"></ul>
+    <p id="incidents-empty" class="incidents-empty" hidden>
+      Feeds are reporting nothing above the surfacing threshold.
+    </p>
   </div>
+
+  <div class="incident-detail">
+    <h2 id="incident-detail-title" class="incident-detail-title">NO INCIDENTS</h2>
+    <p id="incident-detail-meta" class="incident-detail-meta"></p>
+    <div class="aegis-incident-progress"><div id="incident-progress-fill"></div></div>
+    <p id="incident-phase" class="aegis-incident-phase"></p>
+  </div>
+
+  <div id="incident-controls" class="aegis-incident-controls" data-scenario="false">
+    <button id="incident-focus-btn" class="scene-btn scene-btn-primary" type="button">FOCUS</button>
+    <button id="incident-run-btn" class="scene-btn scene-btn-primary" type="button" hidden>RUN SCENARIO</button>
+    <button id="incident-pause-btn" class="scene-btn" type="button" hidden disabled>PAUSE</button>
+    <button id="incident-reset-btn" class="scene-btn" type="button" hidden>RESET</button>
+    <button id="incident-exit-btn" class="scene-btn scene-btn-danger" type="button" hidden disabled>EXIT</button>
+  </div>
+</section>

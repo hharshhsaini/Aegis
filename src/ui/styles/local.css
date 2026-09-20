@@ -1,0 +1,700 @@
+/* ═══════════════════════════════════════════════
+   AEGIS — Local Intelligence
+   The console pointed at one person: the monitored
+   location, what is near it, and what Aegis is
+   allowed to say out loud about it.
+   ═══════════════════════════════════════════════ */
+
+/* ── Location consent ──────────────────────────── */
+
+/* Shown once, before anything else has a location to work with. It is a panel
+   in the rail rather than a modal: asking for a position should not hold the
+   globe hostage, because continuing without one is a legitimate answer. */
+.aegis-consent {
+  position: relative;
+  order: -1;
+  width: 300px;
+  padding: 14px 15px 15px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--accent-dim, var(--glass-border));
+  border-radius: var(--panel-radius);
+  pointer-events: auto;
+}
+
+.aegis-consent-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.aegis-consent-lead {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.aegis-consent-body {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.aegis-consent-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0 0 10px;
+}
+
+.aegis-consent-list li {
+  position: relative;
+  padding-left: 12px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.aegis-consent-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* The privacy sentence is part of the ask, not fine print under it. */
+.aegis-consent-privacy {
+  padding: 8px 9px;
+  margin-bottom: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid var(--glass-border-hover, var(--glass-border));
+  border-radius: 3px;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+
+.aegis-consent-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── Local Intelligence panel ──────────────────── */
+
+#local-panel {
+  --panel-expanded-width: 300px;
+  position: relative;
+  order: -1;
+  width: var(--panel-expanded-width);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+#local-panel:hover {
+  border-color: var(--glass-border-hover);
+}
+
+#local-panel .panel-title {
+  color: var(--accent);
+}
+
+.aegis-local-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px 14px;
+}
+
+.aegis-local-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Scrolls itself rather than growing into the globe. Matches the regional
+     panel so the two read as one rail. */
+  max-height: 44vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+
+#local-panel.collapsed {
+  width: var(--left-collapsed-width);
+}
+
+#local-panel.collapsed .aegis-local-body {
+  display: none;
+}
+
+/* ── Monitored place ───────────────────────────── */
+
+.aegis-local-place {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-local-name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.aegis-local-detail {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* The monitoring line answers "what am I being warned about?" — which is a
+   different question from "what am I looking at?", and the console must never
+   let the two blur together. */
+.aegis-local-monitoring {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.aegis-local-monitor-btn {
+  margin-top: 7px;
+  align-self: flex-start;
+  padding: 4px 9px;
+  background: transparent;
+  border: 1px solid var(--glass-border-hover, var(--glass-border));
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.aegis-local-monitor-btn:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.aegis-local-monitor-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.aegis-local-cta {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-local-section {
+  padding: 11px 0 4px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-local-section:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Nearest incidents ─────────────────────────── */
+
+.aegis-local-incidents {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.local-incident {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 8px;
+  padding-left: 7px;
+  border-left: 2px solid var(--glass-border);
+}
+
+/* Level is carried by a thin rule rather than a coloured block: an operator
+   should be able to scan severity without the panel shouting. */
+.local-incident[data-level='NOTICE'] {
+  border-left-color: var(--tone-info, var(--accent));
+}
+
+.local-incident[data-level='WARNING'] {
+  border-left-color: var(--tone-warn);
+}
+
+.local-incident[data-level='URGENT'] {
+  border-left-color: var(--tone-critical, var(--tone-warn));
+}
+
+.local-incident-title {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.local-incident-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.local-incident-empty {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+/* ── Briefings and voice ───────────────────────── */
+
+.aegis-local-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-local-voice {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.aegis-local-voice .aegis-panel-action {
+  flex: 0 0 52px;
+}
+
+.aegis-local-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 7px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.aegis-local-official {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+/* NOT CONFIGURED is not an error, and must not be painted as one — nothing is
+   broken, there is simply no authority feed connected. */
+.aegis-local-official[data-tone='ok'] {
+  color: var(--tone-ok, var(--accent));
+}
+
+/* ── Voice alert card ──────────────────────────── */
+
+/* Deliberately small and deliberately transient. A full-screen interruption
+   for every announcement is how an alert layer gets muted. */
+.aegis-voice-alert {
+  position: fixed;
+  right: 24px;
+  bottom: 104px;
+  z-index: 60;
+  width: 272px;
+  padding: 11px 13px 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--glass-border-hover, var(--glass-border));
+  border-left: 3px solid var(--accent);
+  border-radius: var(--panel-radius);
+  pointer-events: none;
+  animation: aegis-voice-alert-in 220ms ease-out;
+}
+
+.aegis-voice-alert[data-level='WARNING'] {
+  border-left-color: var(--tone-warn);
+}
+
+.aegis-voice-alert[data-level='URGENT'] {
+  border-left-color: var(--tone-critical, var(--tone-warn));
+}
+
+@keyframes aegis-voice-alert-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-voice-alert {
+    animation: none;
+  }
+}
+
+.aegis-voice-alert-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.aegis-voice-alert-kicker {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
+  color: var(--text-dim);
+}
+
+.aegis-voice-alert-level {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.aegis-voice-alert[data-level='WARNING'] .aegis-voice-alert-level {
+  color: var(--tone-warn);
+}
+
+.aegis-voice-alert[data-level='URGENT'] .aegis-voice-alert-level {
+  color: var(--tone-critical, var(--tone-warn));
+}
+
+.aegis-voice-alert-title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.aegis-voice-alert-distance {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.aegis-voice-alert-distance:empty,
+.aegis-voice-alert-meta:empty {
+  display: none;
+}
+
+.aegis-voice-alert-meta {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+/* ── AEGIS LIVE ─────────────────────────────────
+   A professional intelligence transcript, not a messaging app. Deliberately
+   no bubbles, no avatars, no alignment games: every line comes from the same
+   speaker, so the only things worth distinguishing are WHEN it was said, WHAT
+   KIND of statement it was, and whether it can be opened. ── */
+
+.aegis-live {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  min-height: 0;
+}
+
+.aegis-live-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.aegis-live-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.2em;
+  color: var(--tone-ok);
+  white-space: nowrap;
+}
+
+.aegis-live-chip::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Monitoring breathes slowly; speaking pulses. Neither blinks — a blinking
+   status light reads as a fault. */
+.aegis-live-chip[data-state='MONITORING']::before {
+  animation: aegis-live-breathe 3.4s ease-in-out infinite;
+}
+
+.aegis-live-chip[data-state='SPEAKING'] {
+  color: var(--accent);
+}
+
+.aegis-live-chip[data-state='SPEAKING']::before {
+  animation: aegis-live-breathe 1s ease-in-out infinite;
+}
+
+.aegis-live-chip[data-state='MUTED'] {
+  color: var(--text-dim);
+}
+
+.aegis-live-chip[data-state='MUTED']::before {
+  box-shadow: none;
+  background: transparent;
+  border: 1px solid currentColor;
+}
+
+@keyframes aegis-live-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.aegis-live-scroll {
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.aegis-live-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.aegis-live-message {
+  position: relative;
+  padding: 0 0 0 11px;
+  border-left: 1px solid var(--glass-border);
+  animation: aegis-live-arrive 320ms ease both;
+}
+
+/* Only the new line animates. The panel must not jump when one arrives. */
+@keyframes aegis-live-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aegis-live-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.aegis-live-who {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+.aegis-live-time {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+}
+
+.aegis-live-text {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* The kinds. Colour separates them at a glance; the label says which in
+   words, so the distinction never rests on hue alone. */
+.aegis-live-message[data-kind='MODEL'] {
+  border-left-color: rgba(232, 234, 237, 0.18);
+}
+.aegis-live-message[data-kind='MODEL'] .aegis-live-who {
+  color: var(--text-secondary);
+}
+
+.aegis-live-message[data-kind='WARNING'] {
+  border-left-color: var(--tone-alert);
+}
+.aegis-live-message[data-kind='WARNING'] .aegis-live-who {
+  color: var(--tone-alert);
+}
+
+.aegis-live-message[data-kind='SCENARIO'] {
+  border-left-color: #ffb347;
+}
+.aegis-live-message[data-kind='SCENARIO'] .aegis-live-who {
+  color: #ffb347;
+}
+
+.aegis-live-message[data-kind='MONITORING'] .aegis-live-who {
+  color: var(--text-dim);
+}
+
+/* The line the voice is reading right now. */
+.aegis-live-message[data-speaking='true'] {
+  border-left-color: var(--accent);
+  border-left-width: 2px;
+  padding-left: 10px;
+}
+
+.aegis-live-message[data-speaking='true'] .aegis-live-text {
+  color: var(--text-primary);
+}
+
+/* The line a marker click pointed at. */
+.aegis-live-message[data-highlighted='true'] {
+  background: var(--accent-dim);
+  border-radius: 0 4px 4px 0;
+}
+
+.aegis-live-action {
+  margin-top: 6px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--btn-radius);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.aegis-live-action:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* Shown only when the reader has scrolled away from the newest line. */
+.aegis-live-jump {
+  align-self: center;
+  background: var(--accent-dim);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: var(--btn-radius);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.18em;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.aegis-live-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.aegis-live-mute {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--btn-radius);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  padding: 6px 11px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.aegis-live-mute:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.aegis-live-mute-icon {
+  color: var(--tone-ok);
+  font-size: 7px;
+}
+
+/* Muted is a state of the VOICE, never of the monitoring. The transcript
+   beside it keeps filling, which is the whole point. */
+.aegis-live-mute[data-muted='true'] {
+  color: var(--text-dim);
+}
+
+.aegis-live-mute[data-muted='true'] .aegis-live-mute-icon {
+  color: var(--text-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-live-message {
+    animation: none;
+  }
+  .aegis-live-chip::before {
+    animation: none !important;
+  }
+}

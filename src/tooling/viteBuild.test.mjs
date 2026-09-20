@@ -13,7 +13,10 @@ test('explicit build inputs preserve browser-only defines, plugin order and loop
     cesiumToken: 'ion-fixture',
   });
   assert.equal(config.plugins[2], plugin);
-  assert.equal(config.server.host, 'localhost');
+  // An explicit IPv4 loopback, not the string 'localhost'. Node resolves
+  // 'localhost' through the OS and on dual-stack macOS binds IPv6 ONLY, which
+  // leaves Chrome — which tries 127.0.0.1 first — unable to connect at all.
+  assert.equal(config.server.host, '127.0.0.1');
   assert.equal(config.server.port, 4173);
   assert.deepEqual(config.server.allowedHosts, [
     'localhost',
@@ -66,12 +69,12 @@ test('root config retains existing named exports and standalone provider order',
     config.plugins.slice(2, -1).map((plugin) => plugin.name),
     providers.localProviderPlugins().map((plugin) => plugin.name),
   );
-  assert.equal(config.plugins.at(-2).name, 'gev-key-setup');
+  assert.equal(config.plugins.at(-2).name, 'aegis-provider-status');
   assert.equal(config.plugins.at(-1).name, 'api-not-found');
 });
 
 test('build export resolves in Node and has no browser fallback', async () => {
-  const exported = await import('gods-eye-view/build/vite');
+  const exported = await import('aegis/build/vite');
   assert.equal(exported.createBrowserViteConfig, createBrowserViteConfig);
   const pkg = JSON.parse(
     readFileSync(new URL('../../package.json', import.meta.url)),

@@ -1,6 +1,7 @@
 import {
   cockpitEntryAllowed,
   isExplicitUserIntentOrigin,
+  militaryContactsSatisfied,
   recordContextRestoreExplicitChange,
   recordContextSessionUserChange,
   shouldExitContextForLayerChange,
@@ -218,7 +219,7 @@ export function _handleContextLayerChange(change) {
       contextMode: this._contextMode,
       contextModeChanging: this._contextModeChanging,
       flightsEnabled: !!this._dataManager?.isEnabled('flights'),
-      militaryEnabled: !!this._dataManager?.isEnabled('military'),
+      militaryEnabled: militaryContactsSatisfied(this._dataManager),
     })
   ) {
     this.cockpitView.exit({ restoreTracking: false });

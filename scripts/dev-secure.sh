@@ -7,7 +7,10 @@ cd "$ROOT_DIR"
 
 PORT="${PORT:-4173}"
 # Local-only by default; set HOST=0.0.0.0 explicitly to expose on the LAN.
-HOST="${HOST:-localhost}"
+# 127.0.0.1 rather than "localhost": the latter resolves to IPv6 ::1 on
+# dual-stack macOS, leaving nothing on IPv4 and making Chrome — which tries
+# 127.0.0.1 first — fail with ERR_CONNECTION_REFUSED.
+HOST="${HOST:-127.0.0.1}"
 
 GOOGLE_MAPS_API_KEY_ENV="${GOOGLE_MAPS_API_KEY:-}"
 GOOGLE_MAPS_API_KEY_KEYCHAIN=""
@@ -151,7 +154,7 @@ resolve_opensky_credentials
 CCTV_AUSTIN_MAX_SOURCES="${CCTV_AUSTIN_MAX_SOURCES:-36}"
 CCTV_MAX_SOURCES="${CCTV_MAX_SOURCES:-48}"
 
-echo "Starting God's Eye View dev server..."
+echo "Starting Aegis dev server..."
 echo "URL: http://localhost:${PORT}/"
 echo "Google Maps key source: ${GOOGLE_MAPS_API_KEY_SOURCE}"
 echo "OpenSky auth mode: ${OPENSKY_AUTH_MODE}"

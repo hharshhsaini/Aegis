@@ -37,6 +37,13 @@ export function buildPlaybackQueue(
  * it receives no cancelled token, so resource release can finish after Stop.
  * An empty/already-cancelled queue acquires and releases no resources.
  *
+ * gate() is an optional pause point awaited between phases. The runner cannot
+ * suspend a phase that is already running — a camera flight in progress will
+ * land — so a pause takes effect at the next phase boundary. That is a real
+ * limit and the caller should describe it as one rather than promising a
+ * freeze-frame. Cancellation is rechecked after the gate resolves, so Stop
+ * during a pause still stops.
+ *
  * @param {Array<{scene:Object, shot:Object}>} queue Normalized, fixed shot queue.
  * @param {Object} options
  * @param {{cancelled?:boolean, signal?:AbortSignal}} options.token Run lifetime.
@@ -44,11 +51,12 @@ export function buildPlaybackQueue(
  * settle/hold/completeShot callbacks, releaseScene and optional complete.
  * @param {Object|null} [options.previousScene=null] Previously loaded scene.
  * @param {boolean} [options.releaseOnFinish=true] Release the final scene.
+ * @param {(() => Promise<void>)|null} [options.gate=null] Awaited between phases.
  * @returns {Promise<{status:'completed'|'cancelled', completedShots:number}>}
  */
 export async function playSceneQueue(
   queue,
-  { token, adapter, previousScene = null, releaseOnFinish = true },
+  { token, adapter, previousScene = null, releaseOnFinish = true, gate = null },
 ) {
   const cancelled = () => Boolean(token.cancelled || token.signal?.aborted);
   let activeScene = null;
@@ -75,6 +83,10 @@ export async function playSceneQueue(
       activeScene = scene;
       const context = { scene, shot, index, total: queue.length, token };
       for (const phase of SHOT_PHASES) {
+        if (cancelled()) break;
+        // Hold here while paused, then recheck: Stop pressed during a pause
+        // must not be followed by one more phase.
+        if (gate) await gate();
         if (cancelled()) break;
         await adapter[phase](context);
       }

@@ -1,19 +1,14 @@
 {
-  "name": "gods-eye-view",
+  "name": "aegis",
   "private": true,
   "version": "0.1.1",
-  "description": "A real-time intelligence console for planet Earth \u2014 photorealistic 3D globe, live aircraft/ships/satellites/earthquakes/CCTV, and hands-free voice control. Runs in a browser.",
+  "description": "Aegis \u2014 Disaster Intelligence Platform.",
   "type": "module",
   "license": "MIT",
-  "author": "Bilawal Sidhu",
-  "homepage": "https://github.com/bilawalsidhu/gods-eye-view#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bilawalsidhu/gods-eye-view.git"
-  },
-  "bugs": {
-    "url": "https://github.com/bilawalsidhu/gods-eye-view/issues"
-  },
+  "author": "Harsh Saini",
+  "contributors": [
+    "Bilawal Sidhu (God's Eye View, upstream project)"
+  ],
   "engines": {
     "node": ">=24.14.0 <25 || >=26 <27"
   },
@@ -113,6 +108,21 @@
     "./server/providers/regional": {
       "node": "./server/providers/regional.js"
     },
+    "./server/providers/weather": {
+      "node": "./server/providers/weather.js"
+    },
+    "./server/providers/fires": {
+      "node": "./server/providers/fires.js"
+    },
+    "./server/providers/quakes": {
+      "node": "./server/providers/quakes.js"
+    },
+    "./earthquakes/intelligence": "./src/layers/earthquakes/intelligence.js",
+    "./fires/intelligence": "./src/fires/intelligence.js",
+    "./sources/firms-area": "./src/sources/firmsArea.js",
+    "./weather/intelligence": "./src/data/weatherIntelligence.js",
+    "./risk/engine": "./src/risk/riskEngine.js",
+    "./sources/open-meteo": "./src/sources/openMeteo.js",
     "./server/providers/openai": {
       "node": "./server/providers/openai.js"
     },
@@ -188,7 +198,6 @@
     "./application/errors": "./src/app/errors.js",
     "./ui/composition": "./src/ui/composition.js",
     "./ui/hud": "./src/hud.js",
-    "./standalone/settings": "./src/keySetup.js",
     "./voice/actions": "./src/voice/gevActions.js",
     "./annotations": "./src/annotations/index.js",
     "./context": "./src/data/contextStore.js",

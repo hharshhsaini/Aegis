@@ -1,0 +1,276 @@
+/* ═══════════════════════════════════════════════
+   AEGIS — Regional Intelligence
+   What is true of the place the camera is looking
+   at, assembled from what the other engines have
+   already scored.
+   ═══════════════════════════════════════════════ */
+
+#regional-panel {
+  --panel-expanded-width: 300px;
+  position: relative;
+  order: 0;
+  width: var(--panel-expanded-width);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+#regional-panel:hover {
+  border-color: var(--glass-border-hover);
+}
+
+#regional-panel .panel-title {
+  color: var(--accent);
+}
+
+.aegis-regional-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px 14px;
+}
+
+.aegis-regional-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* The panel scrolls its own body rather than growing into the globe, and
+     the rail's pointer-events are re-enabled for it in command-console.css —
+     without that a wheel here reaches the canvas and zooms the map. */
+  max-height: 46vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+
+#regional-panel.collapsed {
+  width: var(--left-collapsed-width);
+}
+
+#regional-panel.collapsed .aegis-regional-body {
+  display: none;
+}
+
+/* ── Place ─────────────────────────────────────── */
+
+.aegis-regional-place {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 0 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-regional-name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.aegis-regional-detail {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.aegis-regional-coords {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.aegis-regional-status {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.aegis-regional-status[data-tone='warn'] {
+  color: var(--tone-warn);
+}
+
+/* ── Sections ──────────────────────────────────── */
+
+.aegis-regional-section {
+  padding: 11px 0 4px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.aegis-regional-section:last-of-type {
+  border-bottom: none;
+}
+
+.aegis-regional-heading {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+/* ── Hazard snapshot ───────────────────────────── */
+
+.aegis-regional-snapshot {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.regional-hazard {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.regional-hazard-name {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.regional-hazard-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* An unscored hazard is dimmed, so an em dash never reads as a low score. */
+.regional-hazard[data-level='UNKNOWN'] .regional-hazard-score {
+  color: var(--text-dim);
+}
+
+.regional-hazard-scale {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-dim);
+}
+
+.regional-hazard-trend {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  width: 10px;
+  text-align: center;
+}
+
+.regional-hazard-trend[data-direction='INCREASING'] {
+  color: #ff8c42;
+}
+
+.regional-hazard-trend[data-direction='DECREASING'] {
+  color: #3ddc97;
+}
+
+.regional-hazard-bar {
+  grid-column: 1 / -1;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.regional-hazard-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--text-dim);
+}
+
+/* ── Outlook ───────────────────────────────────── */
+
+.aegis-regional-outlook {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.regional-outlook-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.regional-outlook-when {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.regional-outlook-score {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.regional-outlook-empty,
+.regional-conditions-empty {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
+/* ── Context ───────────────────────────────────── */
+
+.aegis-regional-conditions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 6px;
+  margin-bottom: 10px;
+}
+
+.aegis-regional-conditions div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.aegis-regional-conditions dt {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+.aegis-regional-conditions dd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+.aegis-regional-incidents-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.aegis-regional-incidents-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+.aegis-regional-incidents {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}

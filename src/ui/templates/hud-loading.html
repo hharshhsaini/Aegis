@@ -1,11 +1,46 @@
   <!-- Intelligence HUD Overlay -->
   <div id="intel-hud"></div>
 
-  <!-- Loading screen -->
-  <div id="loading-screen">
-    <div class="loader-content">
-      <span class="loader-logo brand-logo" data-logo-gaze data-logo-src="/logo.svg" aria-hidden="true"><img src="/logo.svg" alt="" /></span>
-      <h2>GOD'S EYE <span class="title-accent">VIEW</span></h2>
-      <p class="loader-status">Initializing photorealistic world...</p>
+  <!-- Startup sequence.
+       Purely typographic. There is no emblem, no orb and no globe here: the
+       real Cesium globe is what the sequence hands over TO, and a second,
+       fake one competing with it for the same seconds was the weakest part of
+       the reveal. Everything below is text and thin rules, drawn by CSS from
+       `data-phase`. -->
+  <div id="loading-screen" data-phase="darkness">
+    <div class="aegis-intro" aria-hidden="true">
+      <div class="aegis-intro-stage">
+        <!-- Phase 1: a single hairline, the whole opening image. -->
+        <span class="aegis-intro-rule"></span>
+
+        <!-- Phase 2-4: the wordmark. Each letter is its own element so the
+             name can assemble rather than fade in as a block. -->
+        <h1 class="aegis-intro-word">
+          <span class="aegis-intro-letter" style="--i: 0">A</span
+          ><span class="aegis-intro-letter" style="--i: 1">E</span
+          ><span class="aegis-intro-letter" style="--i: 2">G</span
+          ><span class="aegis-intro-letter" style="--i: 3">I</span
+          ><span class="aegis-intro-letter" style="--i: 4">S</span>
+        </h1>
+
+        <!-- Phase 5: the scan, a thin line crossing the settled word. -->
+        <span class="aegis-intro-scanline"></span>
+
+        <p class="aegis-intro-tagline">DISASTER INTELLIGENCE PLATFORM</p>
+        <p class="aegis-intro-online"><span class="aegis-intro-online-dot"></span>SYSTEM ONLINE</p>
+        <p class="aegis-intro-reconnect">GLOBAL INTELLIGENCE ONLINE</p>
+      </div>
     </div>
+
+    <!-- Offered only when the browser refused to start audio on its own. -->
+    <button id="aegis-intro-audio" class="aegis-intro-audio" type="button" hidden>
+      ENABLE AUDIO
+    </button>
+
+    <button id="aegis-intro-skip" class="aegis-intro-skip" type="button">SKIP</button>
+
+    <!-- Real bootstrap status. Silent during the sequence; the error path in
+         main.js reveals it, because a console that failed to start must say
+         so rather than sitting behind a title card. -->
+    <p class="loader-status" role="status"></p>
   </div>

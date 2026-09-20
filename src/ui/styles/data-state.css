@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════
+   AEGIS — Feed state
+   One vocabulary for data health, shared by every
+   intelligence panel. See src/ui/dataState.js.
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --tone-ok: #3ddc97;
+  --tone-warn: #ffd23f;
+  --tone-alert: #ff6b4d;
+  --tone-idle: rgba(232, 234, 237, 0.45);
+  --panel-gutter: 14px;
+  --panel-stack-gap: 10px;
+}
+
+/* ── Header chip ───────────────────────────────── */
+
+.aegis-feed-chip {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  border: 1px solid currentcolor;
+  color: var(--tone-idle);
+  /* colour-mix keeps the fill tied to the tone without a second variable per
+     state, so adding a tone needs one rule rather than two. */
+  background: color-mix(in srgb, currentcolor 12%, transparent);
+}
+
+.aegis-feed-chip[data-tone='ok'] {
+  color: var(--tone-ok);
+}
+.aegis-feed-chip[data-tone='warn'] {
+  color: var(--tone-warn);
+}
+.aegis-feed-chip[data-tone='alert'] {
+  color: var(--tone-alert);
+}
+.aegis-feed-chip[data-tone='idle'] {
+  color: var(--tone-idle);
+}
+
+/* A feed that is syncing pulses; a feed that is fine does not ask for
+   attention. Reduced-motion users get the colour and nothing else. */
+.aegis-feed-chip[data-tone='idle'] {
+  animation: aegis-feed-pulse 2.4s ease-in-out infinite;
+}
+.aegis-feed-chip[data-tone='ok'],
+.aegis-feed-chip[data-tone='warn'],
+.aegis-feed-chip[data-tone='alert'] {
+  animation: none;
+}
+
+@keyframes aegis-feed-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aegis-feed-chip {
+    animation: none !important;
+  }
+}
+
+/* ── State block ───────────────────────────────── */
+
+.aegis-feed-state {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--tone-idle) 40%, transparent);
+  border-left-width: 2px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.aegis-feed-state[data-tone='warn'] {
+  border-left-color: var(--tone-warn);
+}
+.aegis-feed-state[data-tone='alert'] {
+  border-left-color: var(--tone-alert);
+}
+.aegis-feed-state[data-tone='idle'] {
+  border-left-color: var(--tone-idle);
+}
+.aegis-feed-state[data-tone='ok'] {
+  border-left-color: var(--tone-ok);
+}
+
+.aegis-feed-state-headline {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--text-primary);
+}
+
+.aegis-feed-state[data-tone='alert'] .aegis-feed-state-headline {
+  color: var(--tone-alert);
+}
+.aegis-feed-state[data-tone='warn'] .aegis-feed-state-headline {
+  color: var(--tone-warn);
+}
+
+.aegis-feed-state-message {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.aegis-feed-state-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+.aegis-feed-state-meta dt {
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.aegis-feed-state-meta dd {
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.aegis-feed-state-retry {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-dim);
+  transition: background var(--transition-fast);
+}
+
+.aegis-feed-state-retry:hover {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* Diagnostics: present, reachable, and never the first thing read. */
+.aegis-feed-state-detail summary {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  cursor: pointer;
+  list-style: none;
+}
+
+.aegis-feed-state-detail summary::marker,
+.aegis-feed-state-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+.aegis-feed-state-detail summary::before {
+  content: '▸ ';
+}
+
+.aegis-feed-state-detail[open] summary::before {
+  content: '▾ ';
+}
+
+.aegis-feed-state-detail p {
+  margin-top: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  word-break: break-word;
+}
+
+/* ── Metric grid ────────────────────────────────────
+   The dense block that replaced a sentence in the fire and earthquake panels.
+   Two columns of label-over-value, sized so six metrics fit without the panel
+   growing into the globe. */
+
+.aegis-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 12px;
+  margin: 10px 0 4px;
+}
+
+.aegis-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.aegis-metric dt {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aegis-metric dd {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+/* A gap is dimmed so an em dash can never be mistaken for a low value. */
+.aegis-metric dd[data-empty='true'] {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.aegis-metric-strip {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0 2px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 6px;
+}
+
+.aegis-metric-strip:empty {
+  display: none;
+}
+
+.aegis-metric-strip-label {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+}
+
+.aegis-metric-strip-value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}

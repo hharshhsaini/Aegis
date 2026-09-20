@@ -22,6 +22,7 @@ import {
   createBhoteKoshiEmbeddedMedia,
   resolveEmbeddedMediaSource,
 } from './bhoteKoshiEmbeddedMedia.js';
+import { attachTimelineScrubber } from '../ui/timelineScrubber.js';
 
 export const BHOTE_KOSHI_LAYER_ID = 'bhote-koshi-2026';
 export const BHOTE_KOSHI_OVERLAY_SOURCE_ID = 'bhote-koshi-witnesses';
@@ -927,22 +928,24 @@ function createPanel(event, handlers) {
     .addEventListener('input', (inputEvent) => {
       handlers.setSplit(Number(inputEvent.target.value) / 100);
     });
-  panel
-    .querySelector('[data-role="progress"]')
-    .addEventListener('input', (inputEvent) => {
-      handlers.previewProgress(Number(inputEvent.target.value) / 1000);
-    });
-  panel
-    .querySelector('[data-role="progress"]')
-    .addEventListener('change', (inputEvent) => {
-      handlers.commitProgress(Number(inputEvent.target.value) / 1000, {
-        final: true,
-      });
-    });
+  // The reconstruction clock is scrubbed through an isolating controller
+  // rather than raw input/change listeners. A native range lets every pointer
+  // event bubble, so a drag also reached the panel's hover disclosure — whose
+  // pointerleave schedules a close — the panel's own collapse handler, and the
+  // Cesium canvas once the cursor left the panel. The scrubber stops all of
+  // that at the input and keeps the drag under an explicit pointer capture.
+  const progressScrubber = attachTimelineScrubber({
+    element: refs.progressInput,
+    // The authored range, stated rather than inferred: this control is
+    // rendered at 0..1000 so a seek has sub-percent resolution.
+    range: { min: 0, max: 1000 },
+    onPreview: (fraction) => handlers.previewProgress(fraction),
+    onCommit: (fraction) => handlers.commitProgress(fraction, { final: true }),
+  });
   const rightRail = document.getElementById?.('right-context-rail');
   rightRail?.classList.add('bhote-event-active');
   (rightRail || document.body).appendChild(panel);
-  return { panel, refs };
+  return { panel, refs, progressScrubber };
 }
 
 export function createBhoteKoshiEventLayer({
@@ -964,6 +967,7 @@ export function createBhoteKoshiEventLayer({
   let _enabled = false;
   let _panel = null;
   let _panelRefs = null;
+  let _progressScrubber = null;
   let _splitLine = null;
   let _splitHandle = null;
   let _splitDragging = false;
@@ -3004,11 +3008,16 @@ export function createBhoteKoshiEventLayer({
         ? sceneClockProgress
         : clampUnit(_sceneScrubProgress);
     const displayProgress = sceneDirected ? visibleSceneProgress : _progress;
-    setElementProperty(
-      _panelRefs.progressInput,
-      'value',
-      String(Math.round(displayProgress * 1000)),
-    );
+    // Playback must not fight the operator for the playhead. While a scrub is
+    // live the clock keeps running and the panel keeps updating, but the
+    // handle stays where the pointer put it — otherwise it snapped back to the
+    // playing position on every tick and the drag looked broken.
+    if (!_progressScrubber?.isDragging?.())
+      setElementProperty(
+        _panelRefs.progressInput,
+        'value',
+        String(Math.round(displayProgress * 1000)),
+      );
     setElementProperty(
       _panelRefs.progressInput,
       'disabled',
@@ -3475,6 +3484,7 @@ export function createBhoteKoshiEventLayer({
       });
       _panel = panelView.panel;
       _panelRefs = panelView.refs;
+      _progressScrubber = panelView.progressScrubber;
       syncPresentationMode();
       overlayHost.setVisible(
         BHOTE_KOSHI_OVERLAY_SOURCE_ID,
@@ -3567,12 +3577,17 @@ export function createBhoteKoshiEventLayer({
     _surgePoint = null;
     _lastSurgePosition = null;
     _lastSurgeVisible = null;
+    // The scrubber holds listeners and possibly a pointer capture; releasing
+    // it before the panel goes keeps a torn-down control from swallowing the
+    // next gesture.
+    _progressScrubber?.destroy?.();
     _panel?.remove();
     document
       .getElementById?.('right-context-rail')
       ?.classList.remove('bhote-event-active');
     _panel = null;
     _panelRefs = null;
+    _progressScrubber = null;
     _splitDragging = false;
     _splitPointerId = null;
     _splitLine?.remove();

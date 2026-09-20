@@ -1,0 +1,348 @@
+/* ===========================================================================
+   AEGIS EARTHQUAKE INTELLIGENCE PANEL
+
+   Third intelligence surface, third palette: violet-to-rose, matching the
+   depth ramp on the globe, so earthquake surfaces are never confused with the
+   fire layer's amber or the weather panel's risk tints.
+
+   The magnitude leads because it is the number an operator reads first. Every
+   USGS-provided value is labelled as USGS, and the attribution line stays
+   visible whether or not an event is selected.
+   =========================================================================== */
+
+:root {
+  --quake-shallow: #ff4d6d;
+  --quake-mid: #c77dff;
+  --quake-deep: #7aa2ff;
+  --quake-radius: #8ecae6;
+}
+
+/* Docked on the right, below the fire panel, so each intelligence layer has a
+   home and none of them fight the left rail's auto-collapse. */
+#quake-panel {
+  --panel-expanded-width: 300px;
+  position: fixed;
+  right: var(--right-rail-x);
+  bottom: 96px;
+  z-index: 98;
+  width: var(--panel-expanded-width);
+  max-height: 38vh;
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(199, 125, 255, 0.22);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+  transition: border-color var(--transition-fast);
+}
+
+#quake-panel:hover {
+  border-color: rgba(199, 125, 255, 0.42);
+}
+
+#quake-panel .panel-title {
+  color: var(--quake-mid);
+}
+
+#quake-panel.collapsed {
+  width: var(--left-collapsed-width);
+}
+
+#quake-panel.collapsed .aegis-quake-body {
+  display: none;
+}
+
+.aegis-quake-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 38vh;
+}
+
+.aegis-quake-body {
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0 16px 12px;
+}
+
+.aegis-quake-status {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  padding: 6px 0 8px;
+}
+
+.aegis-quake-refresh {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  padding: 2px;
+  transition: color var(--transition-fast);
+}
+
+.aegis-quake-refresh:hover {
+  color: var(--quake-mid);
+}
+
+.aegis-quake-refresh[aria-busy='true'] {
+  color: var(--quake-mid);
+  animation: aegis-quake-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes aegis-quake-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.aegis-quake-headline {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 6px;
+}
+
+.aegis-quake-magnitude {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--quake-shallow);
+}
+
+.aegis-quake-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.aegis-quake-alert {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  padding: 2px 7px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.aegis-quake-heading {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin: 8px 0 10px;
+}
+
+.aegis-quake-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aegis-quake-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.aegis-quake-key {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.aegis-quake-value {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.aegis-quake-section {
+  padding: 10px 0 2px;
+  border-top: 1px solid var(--glass-border);
+  margin-top: 10px;
+}
+
+.aegis-quake-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+}
+
+.aegis-quake-strong {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.aegis-quake-note {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 5px;
+}
+
+.aegis-quake-note:empty {
+  display: none;
+}
+
+/* Response context is weather shown AFTER an event, never a cause of it. */
+.aegis-quake-response {
+  border-left: 2px solid var(--quake-radius);
+  padding-left: 8px;
+  margin-top: 10px;
+}
+
+.aegis-quake-radii {
+  display: flex;
+  gap: 5px;
+}
+
+.aegis-quake-radius-btn {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--btn-radius);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 5px 0;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.aegis-quake-radius-btn:hover {
+  border-color: var(--quake-radius);
+  color: var(--text-primary);
+}
+
+.aegis-quake-radius-btn[aria-pressed='true'] {
+  border-color: var(--quake-radius);
+  color: var(--quake-radius);
+}
+
+.aegis-quake-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--quake-radius);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.aegis-quake-attribution {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--glass-border);
+}
+
+@media (max-width: 900px) {
+  #quake-panel {
+    --panel-expanded-width: calc(100vw - 32px);
+  }
+}
+
+/* --- Forecast block -------------------------------------------------------
+   The probability is large, but the target line directly under it is what
+   makes the number meaningful, so they are sized as a pair. */
+
+.aegis-quake-forecast {
+  padding: 8px 0 10px;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 8px;
+}
+
+.aegis-quake-forecast-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.aegis-quake-probability {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.aegis-quake-forecast-of {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.aegis-quake-target {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-primary);
+  margin: 4px 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--glass-border);
+}
+
+.aegis-quake-why {
+  margin-top: 10px;
+}
+
+.aegis-quake-drivers {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.aegis-quake-drivers li {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 6px;
+}
+
+.aegis-quake-drivers li::before {
+  content: '•';
+  color: var(--quake-mid);
+}
+
+.aegis-quake-summary {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  padding-left: 8px;
+  border-left: 2px solid var(--quake-mid);
+}
+
+/* Model provenance and measured skill, always attached to the number. */
+.aegis-quake-model {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
